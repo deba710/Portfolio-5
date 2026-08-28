@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { portfolioData } from '../data/portfolio';
-import { useProfilePhoto } from '../utils/useProfilePhoto';
+import { PortraitImage } from './PortraitImage';
 import { Menu, X, ArrowUpRight, Terminal, Sparkles } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
@@ -9,7 +9,6 @@ export const Navbar: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
   const [timeString, setTimeString] = useState('');
-  const { photoSrc, hasError, setHasError } = useProfilePhoto();
 
   // Live IST time indicator
   useEffect(() => {
@@ -86,16 +85,12 @@ export const Navbar: React.FC = () => {
             className="group flex items-center gap-4 text-white hover:text-cyan-400 transition-colors"
           >
             <div className="w-10 h-10 border border-cyan-400/50 rounded-sm overflow-hidden flex items-center justify-center bg-cyan-400/5 group-hover:border-cyan-400 group-hover:shadow-[0_0_15px_rgba(34,211,238,0.4)] transition-all flex-shrink-0 relative">
-              {!hasError && photoSrc ? (
-                <img
-                  src={photoSrc}
-                  alt={portfolioData.personal.name}
-                  className="w-full h-full object-cover object-center"
-                  onError={() => setHasError(true)}
-                />
-              ) : (
-                <span className="text-cyan-400 font-mono font-bold text-xl">D</span>
-              )}
+              <PortraitImage
+                alt={portfolioData.personal.name}
+                className="w-full h-full object-cover object-center"
+                fallbackClassName="text-cyan-400 font-mono font-bold text-xl"
+                fallbackText="D"
+              />
             </div>
             <div className="flex flex-col">
               <span className="font-bold tracking-widest text-sm uppercase text-white/90">

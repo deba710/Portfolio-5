@@ -1,61 +1,16 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import { motion } from 'motion/react';
 import { portfolioData } from '../data/portfolio';
-import { useProfilePhoto } from '../utils/useProfilePhoto';
+import { PortraitImage } from './PortraitImage';
 
 export const HeroVisual: React.FC = () => {
   const { personal } = portfolioData;
-  const { photoSrc, hasError, setHasError, updatePhoto } = useProfilePhoto();
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const result = event.target?.result as string;
-        if (result) {
-          updatePhoto(result);
-        }
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const handleDrop = (e: React.DragEvent) => {
-    e.preventDefault();
-    const file = e.dataTransfer.files?.[0];
-    if (file && file.type.startsWith('image/')) {
-      const reader = new FileReader();
-      reader.onload = (event) => {
-        const result = event.target?.result as string;
-        if (result) {
-          updatePhoto(result);
-        }
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  const triggerUpload = () => {
-    fileInputRef.current?.click();
-  };
 
   return (
     <div className="relative w-full max-w-[440px] mx-auto select-none flex items-center justify-center">
       {/* Surrounding concentric ambient circular wireframes */}
       <div className="absolute w-[500px] h-[500px] border border-white/5 rounded-full opacity-40 pointer-events-none" />
       <div className="absolute w-[600px] h-[600px] border border-white/5 rounded-full opacity-20 pointer-events-none" />
-
-      {/* Hidden File Input for direct photo selection */}
-      <input
-        ref={fileInputRef}
-        type="file"
-        accept="image/*"
-        onChange={handleFileChange}
-        className="hidden"
-        aria-label="Upload profile portrait"
-      />
 
       {/* Main Holographic Profile Card */}
       <motion.div
@@ -70,30 +25,18 @@ export const HeroVisual: React.FC = () => {
           Profile ID: {personal.coordinates || '22.5726° N'}
         </div>
 
-        {/* Circular portrait frame */}
-        <div
-          onClick={triggerUpload}
-          onDragOver={(e) => e.preventDefault()}
-          onDrop={handleDrop}
-          className="w-24 h-24 border border-white/20 rounded-full flex items-center justify-center mb-6 relative cursor-pointer group/avatar"
-          title="Click to update portrait photo"
-        >
+        {/* Fixed Non-Interactive Circular portrait frame */}
+        <div className="w-24 h-24 border border-white/20 rounded-full flex items-center justify-center mb-6 relative">
           {/* Subtle surrounding glow ring */}
-          <div className="absolute inset-0 rounded-full border border-cyan-400/20 group-hover/avatar:border-cyan-400/50 group-hover/avatar:shadow-[0_0_20px_rgba(34,211,238,0.3)] transition-all pointer-events-none" />
+          <div className="absolute inset-0 rounded-full border border-cyan-400/20 shadow-[0_0_20px_rgba(34,211,238,0.2)] pointer-events-none" />
 
           <div className="w-20 h-20 bg-neutral-900 rounded-full overflow-hidden flex items-center justify-center border border-cyan-400/30 shadow-[0_0_20px_rgba(34,211,238,0.2)] relative">
-            {!hasError && photoSrc ? (
-              <img
-                src={photoSrc}
-                alt={personal.name}
-                className="w-full h-full object-cover object-center rounded-full transition-transform duration-300 group-hover/avatar:scale-105"
-                onError={() => setHasError(true)}
-              />
-            ) : (
-              <div className="w-full h-full bg-gradient-to-tr from-cyan-900 to-purple-900 flex items-center justify-center">
-                <span className="text-4xl font-serif italic text-white">D</span>
-              </div>
-            )}
+            <PortraitImage
+              alt={personal.name}
+              className="w-full h-full object-cover object-center rounded-full"
+              fallbackClassName="text-4xl font-serif italic text-white"
+              fallbackText="D"
+            />
           </div>
         </div>
 
