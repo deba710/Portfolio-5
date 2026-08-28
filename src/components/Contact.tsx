@@ -28,8 +28,8 @@ export const Contact: React.FC = () => {
     {
       id: 'github-row',
       label: 'GITHUB',
-      value: contact.github,
-      href: contact.github.startsWith('http') ? contact.github : '#contact',
+      value: 'github.com/deba710',
+      href: contact.github,
       icon: <Github className="w-5 h-5 text-sky-400" />,
       subtext: 'Source code repositories & learning commits',
       canCopy: false,
@@ -37,8 +37,8 @@ export const Contact: React.FC = () => {
     {
       id: 'linkedin-row',
       label: 'LINKEDIN',
-      value: contact.linkedin,
-      href: contact.linkedin.startsWith('http') ? contact.linkedin : '#contact',
+      value: 'Debangan Bera',
+      href: contact.linkedin,
       icon: <Linkedin className="w-5 h-5 text-indigo-400" />,
       subtext: 'Professional network & student updates',
       canCopy: false,
@@ -82,7 +82,7 @@ export const Contact: React.FC = () => {
               id={`contact-link-${row.id}`}
               href={row.href}
               target={row.href.startsWith('http') ? '_blank' : undefined}
-              rel="noreferrer"
+              rel="noopener noreferrer"
               className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between p-6 sm:p-8 gap-4"
             >
               {/* Left Side: Icon, Label, and Value */}

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
 import { portfolioData } from '../data/portfolio';
 import { PortraitImage } from './PortraitImage';
-import { Menu, X, ArrowUpRight, Terminal, Sparkles } from 'lucide-react';
+import { Menu, X, ArrowUpRight, Terminal, Sparkles, Github, Linkedin } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
   const [activeSection, setActiveSection] = useState('hero');
@@ -133,7 +133,7 @@ export const Navbar: React.FC = () => {
           </nav>
 
           {/* Technical Info Widget & Mobile Toggle */}
-          <div className="flex items-center gap-3 sm:gap-4 flex-shrink-0">
+          <div className="flex items-center gap-2.5 sm:gap-3 flex-shrink-0">
             {/* Live Clock / Tech Status (Desktop) */}
             <div className="hidden sm:flex items-center gap-2 px-2.5 sm:px-3 py-1.5 rounded-sm bg-white/5 border border-white/10 text-[10px] font-mono text-white/60 tracking-wider">
               <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_6px_#06b6d4]"></span>
@@ -141,6 +141,32 @@ export const Navbar: React.FC = () => {
               <span className="text-cyan-400 uppercase font-semibold">Active</span>
               <span className="text-white/20">|</span>
               <span className="text-white/80">{timeString || 'LIVE'}</span>
+            </div>
+
+            {/* Desktop Social Profile Icons */}
+            <div className="hidden sm:flex items-center gap-1.5">
+              <a
+                id="nav-social-github"
+                href="https://github.com/deba710"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="GitHub: deba710"
+                aria-label="GitHub Profile"
+                className="p-2 rounded-sm bg-white/5 border border-white/10 text-neutral-300 hover:text-cyan-400 hover:border-cyan-500/40 hover:bg-cyan-500/10 transition-colors"
+              >
+                <Github className="w-3.5 h-3.5" />
+              </a>
+              <a
+                id="nav-social-linkedin"
+                href="https://www.linkedin.com/in/debangan-bera-964648331/"
+                target="_blank"
+                rel="noopener noreferrer"
+                title="LinkedIn: Debangan Bera"
+                aria-label="LinkedIn Profile"
+                className="p-2 rounded-sm bg-white/5 border border-white/10 text-neutral-300 hover:text-cyan-400 hover:border-cyan-500/40 hover:bg-cyan-500/10 transition-colors"
+              >
+                <Linkedin className="w-3.5 h-3.5" />
+              </a>
             </div>
 
             {/* Mobile Menu Button */}
@@ -204,9 +230,35 @@ export const Navbar: React.FC = () => {
               </div>
             </div>
 
-            {/* Mobile Footer info */}
-            <div className="relative z-10 pt-6 mt-6 border-t border-white/10 flex flex-col gap-3 font-mono text-xs text-neutral-400">
+            {/* Mobile Social Links & Footer info */}
+            <div className="relative z-10 pt-6 mt-6 border-t border-white/10 flex flex-col gap-4 font-mono text-xs text-neutral-400">
               <div className="flex items-center justify-between">
+                <span className="text-[10px] text-white/40 uppercase tracking-widest">PROFILES</span>
+                <div className="flex items-center gap-2">
+                  <a
+                    id="mobile-social-github"
+                    href="https://github.com/deba710"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-white/5 border border-white/10 text-neutral-200 hover:text-cyan-400 text-xs transition-colors"
+                  >
+                    <Github className="w-3.5 h-3.5 text-cyan-400" />
+                    <span>GitHub</span>
+                  </a>
+                  <a
+                    id="mobile-social-linkedin"
+                    href="https://www.linkedin.com/in/debangan-bera-964648331/"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-white/5 border border-white/10 text-neutral-200 hover:text-cyan-400 text-xs transition-colors"
+                  >
+                    <Linkedin className="w-3.5 h-3.5 text-cyan-400" />
+                    <span>LinkedIn</span>
+                  </a>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between pt-2 border-t border-white/5">
                 <span>STUDENT • JAVA LEARNER</span>
                 <span className="text-cyan-400 font-semibold">{timeString} IST</span>
               </div>

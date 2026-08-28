@@ -1,9 +1,9 @@
 import React from 'react';
 import { portfolioData } from '../data/portfolio';
-import { ArrowUp } from 'lucide-react';
+import { ArrowUp, Github, Linkedin } from 'lucide-react';
 
 export const Footer: React.FC = () => {
-  const { footer, personal } = portfolioData;
+  const { footer, personal, contact } = portfolioData;
 
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -43,16 +43,40 @@ export const Footer: React.FC = () => {
             </p>
           </div>
 
-          {/* Back to top button */}
-          <button
-            id="back-to-top-button"
-            type="button"
-            onClick={scrollToTop}
-            className="group inline-flex items-center gap-3 px-6 py-3.5 border border-white/20 hover:border-white text-white font-mono text-xs font-bold tracking-widest uppercase transition-all duration-200 cursor-pointer active:scale-95 bg-white/5"
-          >
-            <span>Back to top</span>
-            <ArrowUp className="w-4 h-4 text-cyan-400 group-hover:-translate-y-1 transition-transform" />
-          </button>
+          {/* Social Links and Back to top button */}
+          <div className="flex flex-wrap items-center gap-3">
+            <a
+              id="footer-github-link"
+              href={contact.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group inline-flex items-center gap-2 px-4 py-3.5 border border-white/20 hover:border-cyan-400 text-white hover:text-cyan-400 font-mono text-xs font-bold tracking-widest uppercase transition-all duration-200 cursor-pointer active:scale-95 bg-white/5"
+            >
+              <Github className="w-4 h-4 text-cyan-400" />
+              <span>GitHub</span>
+            </a>
+
+            <a
+              id="footer-linkedin-link"
+              href={contact.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group inline-flex items-center gap-2 px-4 py-3.5 border border-white/20 hover:border-cyan-400 text-white hover:text-cyan-400 font-mono text-xs font-bold tracking-widest uppercase transition-all duration-200 cursor-pointer active:scale-95 bg-white/5"
+            >
+              <Linkedin className="w-4 h-4 text-cyan-400" />
+              <span>LinkedIn</span>
+            </a>
+
+            <button
+              id="back-to-top-button"
+              type="button"
+              onClick={scrollToTop}
+              className="group inline-flex items-center gap-3 px-5 py-3.5 border border-white/20 hover:border-white text-white font-mono text-xs font-bold tracking-widest uppercase transition-all duration-200 cursor-pointer active:scale-95 bg-white/5"
+            >
+              <span>Back to top</span>
+              <ArrowUp className="w-4 h-4 text-cyan-400 group-hover:-translate-y-1 transition-transform" />
+            </button>
+          </div>
 
         </div>
 

@@ -74,14 +74,17 @@ export const HeroVisual: React.FC = () => {
             <div>
               <span className="text-[10px] text-white/40 block uppercase tracking-wider">REPOSITORY</span>
               <a 
-                href="#projects" 
+                id="hero-visual-github-link"
+                href="https://github.com/deba710"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="text-xs sm:text-sm text-neutral-200 hover:text-cyan-300 italic underline underline-offset-2 transition-colors font-sans"
               >
-                /github/debangan
+                /github/deba710
               </a>
             </div>
             <div className="text-right">
-              <span className="text-[10px] text-cyan-300 uppercase tracking-widest font-semibold">2 PROJECTS</span>
+              <span className="text-[10px] text-cyan-300 uppercase tracking-widest font-semibold">VIEW GITHUB</span>
             </div>
           </div>
         </div>

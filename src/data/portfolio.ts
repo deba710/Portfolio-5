@@ -140,7 +140,7 @@ export const portfolioData: PortfolioData = {
         whatIBuilt: "Designed modular Java classes, clean interactive menu interfaces, defensive input parsing with error recovery, and formatted console data tables.",
         technologies: ["Java"],
         status: "Completed",
-        githubUrl: "[ADD YOUR GITHUB LINK]",
+        githubUrl: "https://github.com/deba710",
         liveDemoUrl: "",
         previewVariant: "terminal",
         keyHighlights: [
@@ -159,7 +159,7 @@ export const portfolioData: PortfolioData = {
         whatIBuilt: "Built customizable logic routines for prime factorizations, Fibonacci series, array searches, and geometric console pattern matrices.",
         technologies: ["Java"],
         status: "Completed",
-        githubUrl: "[ADD YOUR GITHUB LINK]",
+        githubUrl: "https://github.com/deba710",
         liveDemoUrl: "",
         previewVariant: "logic",
         keyHighlights: [
@@ -178,7 +178,7 @@ export const portfolioData: PortfolioData = {
         whatIBuilt: "Currently developing the record indexing schema, stream buffers, and file creation/update routines.",
         technologies: ["Java"],
         status: "Ongoing",
-        githubUrl: "[ADD YOUR GITHUB LINK]",
+        githubUrl: "https://github.com/deba710",
         liveDemoUrl: "",
         previewVariant: "blueprint",
         keyHighlights: [
@@ -300,8 +300,8 @@ export const portfolioData: PortfolioData = {
     heading: "LET'S BUILD\nSOMETHING.",
     description: "I'm always open to learning, building and connecting with people who are interested in technology.",
     email: "debangan2007@gmail.com",
-    github: "[ADD YOUR GITHUB]",
-    linkedin: "[ADD YOUR LINKEDIN]",
+    github: "https://github.com/deba710",
+    linkedin: "https://www.linkedin.com/in/debangan-bera-964648331/",
     location: "West Bengal, India",
   },
 
