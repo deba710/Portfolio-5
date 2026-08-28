@@ -7,7 +7,7 @@ export const PersonalIdentity: React.FC = () => {
   const { identity } = portfolioData;
 
   return (
-    <section id="identity" className="py-24 sm:py-32 relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-white/[0.06]">
+    <section id="identity" className="py-24 sm:py-32 relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 border-t border-white/[0.06]">
       
       {/* Section Header */}
       <div className="space-y-3 mb-12 sm:mb-16">

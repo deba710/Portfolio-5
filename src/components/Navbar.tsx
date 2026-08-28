@@ -74,36 +74,36 @@ export const Navbar: React.FC = () => {
       </div>
 
       {/* Main Sticky Navbar */}
-      <header className="fixed top-0 left-0 right-0 z-40 backdrop-blur-xl bg-[#050505]/80 border-b border-white/10 transition-all duration-300">
-        <div className="max-w-7xl mx-auto px-4 sm:px-8 lg:px-12 h-20 flex items-center justify-between">
+      <header className="fixed top-0 left-0 right-0 z-40 backdrop-blur-xl bg-[#050505]/85 border-b border-white/10 transition-all duration-300">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 h-20 flex items-center justify-between">
           
           {/* Brand Monogram & Portrait Avatar */}
           <a
             id="brand-logo-link"
             href="#hero"
             onClick={(e) => handleNavClick(e, '#hero')}
-            className="group flex items-center gap-4 text-white hover:text-cyan-400 transition-colors"
+            className="group flex items-center gap-3.5 text-white hover:text-cyan-400 transition-colors flex-shrink-0"
           >
-            <div className="w-10 h-10 border border-cyan-400/50 rounded-sm overflow-hidden flex items-center justify-center bg-cyan-400/5 group-hover:border-cyan-400 group-hover:shadow-[0_0_15px_rgba(34,211,238,0.4)] transition-all flex-shrink-0 relative">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 border border-cyan-400/50 rounded-sm overflow-hidden flex items-center justify-center bg-cyan-400/5 group-hover:border-cyan-400 group-hover:shadow-[0_0_15px_rgba(34,211,238,0.4)] transition-all flex-shrink-0 relative">
               <PortraitImage
                 alt={portfolioData.personal.name}
-                className="w-full h-full object-cover object-center"
+                className="w-full h-full object-cover object-center pointer-events-none"
                 fallbackClassName="text-cyan-400 font-mono font-bold text-xl"
                 fallbackText="D"
               />
             </div>
             <div className="flex flex-col">
-              <span className="font-bold tracking-widest text-sm uppercase text-white/90">
+              <span className="font-bold tracking-widest text-xs sm:text-sm uppercase text-white/90 font-display">
                 {portfolioData.personal.monogram}
               </span>
-              <span className="text-[10px] font-mono text-cyan-400/80 tracking-[0.2em] uppercase">
+              <span className="text-[9px] sm:text-[10px] font-mono text-cyan-400/80 tracking-[0.2em] uppercase">
                 Student • Java
               </span>
             </div>
           </a>
 
-          {/* Desktop Navigation Links */}
-          <nav className="hidden lg:flex items-center gap-6 xl:gap-8 text-[11px] font-mono uppercase tracking-[0.2em]">
+          {/* Desktop Navigation Links (Responsive spacing across 1024px, 1280px, 1440px, 1920px) */}
+          <nav className="hidden lg:flex items-center gap-4 xl:gap-6 2xl:gap-8 text-[10px] xl:text-[11px] font-mono uppercase tracking-[0.15em] xl:tracking-[0.2em]">
             {portfolioData.navigation.map((item) => {
               const targetId = item.href.replace('#', '');
               const isActive = activeSection === targetId;
@@ -114,10 +114,10 @@ export const Navbar: React.FC = () => {
                   id={`nav-link-${targetId}`}
                   href={item.href}
                   onClick={(e) => handleNavClick(e, item.href)}
-                  className={`transition-colors relative py-1 ${
+                  className={`transition-colors relative py-1.5 whitespace-nowrap cursor-pointer ${
                     isActive
                       ? 'text-cyan-400 font-bold'
-                      : 'text-white/50 hover:text-white'
+                      : 'text-white/60 hover:text-white'
                   }`}
                 >
                   {item.label}
@@ -133,11 +133,11 @@ export const Navbar: React.FC = () => {
           </nav>
 
           {/* Technical Info Widget & Mobile Toggle */}
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-3 sm:gap-4 flex-shrink-0">
             {/* Live Clock / Tech Status (Desktop) */}
-            <div className="hidden sm:flex items-center gap-2.5 px-3 py-1.5 rounded-sm bg-white/5 border border-white/10 text-[10px] font-mono text-white/60 tracking-wider">
-              <span className="w-2 h-2 rounded-full bg-cyan-500 animate-pulse shadow-[0_0_6px_#06b6d4]"></span>
-              <span className="text-white/40 uppercase tracking-tight">System Status:</span>
+            <div className="hidden sm:flex items-center gap-2 px-2.5 sm:px-3 py-1.5 rounded-sm bg-white/5 border border-white/10 text-[10px] font-mono text-white/60 tracking-wider">
+              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_6px_#06b6d4]"></span>
+              <span className="text-white/40 uppercase tracking-tight hidden md:inline">Status:</span>
               <span className="text-cyan-400 uppercase font-semibold">Active</span>
               <span className="text-white/20">|</span>
               <span className="text-white/80">{timeString || 'LIVE'}</span>
@@ -148,7 +148,7 @@ export const Navbar: React.FC = () => {
               id="mobile-menu-toggle-button"
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 rounded-lg bg-neutral-900 border border-white/10 text-neutral-300 hover:text-cyan-400 hover:border-cyan-500/40 focus:outline-none transition-colors"
+              className="lg:hidden p-2 rounded-lg bg-neutral-900 border border-white/10 text-neutral-300 hover:text-cyan-400 hover:border-cyan-500/40 focus:outline-none transition-colors cursor-pointer"
               aria-label="Toggle navigation menu"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}

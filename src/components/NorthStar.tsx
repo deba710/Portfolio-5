@@ -7,7 +7,7 @@ export const NorthStar: React.FC = () => {
   const { northStar } = portfolioData;
 
   return (
-    <section className="py-24 sm:py-36 relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-white/[0.06] overflow-hidden">
+    <section className="py-24 sm:py-36 relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 border-t border-white/[0.06] overflow-hidden">
       
       {/* Huge Ambient Center Glow */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] sm:w-[900px] h-[350px] sm:h-[450px] bg-gradient-to-r from-cyan-500/15 via-sky-500/10 to-indigo-600/15 rounded-full blur-[140px] pointer-events-none" />
