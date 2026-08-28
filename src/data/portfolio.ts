@@ -1,5 +1,8 @@
 import { PortfolioData } from '../types/portfolio';
 
+// REPLACE WITH DEBANGAN'S REAL PHOTO
+export const profilePhoto = "/images/debangan.jpg";
+
 export const portfolioData: PortfolioData = {
   personal: {
     name: "Debangan Bera",
@@ -15,8 +18,8 @@ export const portfolioData: PortfolioData = {
     aboutHeading: "LEARNING WITH\nINTENTION.",
     aboutBio: "I am a student who is currently learning programming and exploring software development. I enjoy practicing what I learn by creating small projects and experimenting with code. I am still at the beginning of my journey, and this portfolio represents my progress as I continue learning and building.",
     photoPlaceholderText: "D / PROFILE VISUAL IDENTITY",
-    hasRealPhoto: false,
-    photoUrl: "", // Ready for future photo upload
+    hasRealPhoto: true,
+    photoUrl: profilePhoto,
   },
 
   navigation: [
