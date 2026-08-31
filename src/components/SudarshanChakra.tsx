@@ -11,7 +11,7 @@ interface SudarshanChakraProps {
   colorTheme?: 'gold' | 'cyan' | 'divine-hybrid';
 }
 
-export const SudarshanChakra: React.FC<SudarshanChakraProps> = ({
+export const SudarshanChakra = React.memo<SudarshanChakraProps>(function SudarshanChakra({
   size = 320,
   className = '',
   variant = 'hero',
@@ -19,7 +19,7 @@ export const SudarshanChakra: React.FC<SudarshanChakraProps> = ({
   isHovered = false,
   glowIntensity = 'medium',
   colorTheme = 'divine-hybrid',
-}) => {
+}) {
   // Generate 24 outer rounded curved solar blades (broad base, rounded semicircular crest)
   const bladeCount = 24;
   const blades = Array.from({ length: bladeCount }, (_, i) => {
@@ -147,36 +147,35 @@ export const SudarshanChakra: React.FC<SudarshanChakraProps> = ({
 
           {/* Glow Filters */}
           <filter id="scChakraGlow" x="-25%" y="-25%" width="150%" height="150%">
-            <feGaussianBlur stdDeviation="3" result="blur" />
+            <feGaussianBlur stdDeviation="2.5" result="blur" />
             <feComposite in="SourceGraphic" in2="blur" operator="over" />
           </filter>
 
-          <filter id="scSuperGlow" x="-50%" y="-50%" width="200%" height="200%">
-            <feGaussianBlur stdDeviation="8" result="blur" />
+          <filter id="scSuperGlow" x="-35%" y="-35%" width="170%" height="170%">
+            <feGaussianBlur stdDeviation="6" result="blur" />
             <feMerge>
-              <feMergeNode in="blur" />
               <feMergeNode in="blur" />
               <feMergeNode in="SourceGraphic" />
             </feMerge>
           </filter>
 
           <filter id="scBladeShadow" x="-20%" y="-20%" width="140%" height="140%">
-            <feDropShadow dx="0" dy="3" stdDeviation="3" floodColor="#000000" floodOpacity="0.7" />
+            <feDropShadow dx="0" dy="2.5" stdDeviation="2.5" floodColor="#000000" floodOpacity="0.65" />
           </filter>
         </defs>
 
         {/* ============================================================ */}
-        {/* ROTATING LAYER 1: 24 HYBRID SUDARSHAN BLADES (Clockwise) */}
-        {/* Half smooth rounded curved crest -> Smooth transition -> Sharp pointed tip */}
+        {/* ROTATING LAYER 1: 24 HYBRID SUDARSHAN BLADES (Counter-Clockwise - Reversed) */}
+        {/* Constant-speed linear rotation */}
         {/* ============================================================ */}
         <motion.g
-          animate={{ rotate: 360 }}
+          animate={{ rotate: -360 }}
           transition={{
             duration: spinDuration,
             repeat: Infinity,
             ease: "linear",
           }}
-          style={{ transformOrigin: "200px 200px" }}
+          style={{ transformOrigin: "200px 200px", willChange: "transform" }}
         >
           {/* 24 Hybrid Curved & Sharp Blades with Multi-Depth Shading */}
           <g filter="url(#scBladeShadow)">
@@ -269,16 +268,16 @@ export const SudarshanChakra: React.FC<SudarshanChakraProps> = ({
         </motion.g>
 
         {/* ============================================================ */}
-        {/* COUNTER-ROTATING LAYER 2: DARK METALLIC & CYAN TECHNICAL RING */}
+        {/* COUNTER-ROTATING LAYER 2: DARK METALLIC & CYAN TECHNICAL RING (Clockwise) */}
         {/* ============================================================ */}
         <motion.g
-          animate={{ rotate: -360 }}
+          animate={{ rotate: 360 }}
           transition={{
             duration: spinDuration * 1.35,
             repeat: Infinity,
             ease: "linear",
           }}
-          style={{ transformOrigin: "200px 200px" }}
+          style={{ transformOrigin: "200px 200px", willChange: "transform" }}
         >
           {/* Dark Recessed Metallic Ring with 3D Depth (Third Layer) */}
           <circle
@@ -345,16 +344,16 @@ export const SudarshanChakra: React.FC<SudarshanChakraProps> = ({
         </motion.g>
 
         {/* ============================================================ */}
-        {/* LAYER 3: GOLDEN INNER RING & SACRED MANDALA (Sixth Layer) */}
+        {/* LAYER 3: GOLDEN INNER RING & SACRED MANDALA (Counter-Clockwise - Reversed) */}
         {/* ============================================================ */}
         <motion.g
-          animate={{ rotate: 360 }}
+          animate={{ rotate: -360 }}
           transition={{
             duration: spinDuration * 1.8,
             repeat: Infinity,
             ease: "linear",
           }}
-          style={{ transformOrigin: "200px 200px" }}
+          style={{ transformOrigin: "200px 200px", willChange: "transform" }}
         >
           {/* Golden Inner Ring (Sixth Layer) */}
           <circle
@@ -446,24 +445,24 @@ export const SudarshanChakra: React.FC<SudarshanChakraProps> = ({
           strokeLinecap="round"
           strokeDasharray="36 360"
           filter="url(#scChakraGlow)"
-          animate={{ rotate: 360 }}
+          animate={{ rotate: -360 }}
           transition={{
             duration: spinDuration * 0.45,
             repeat: Infinity,
             ease: "linear",
           }}
-          style={{ transformOrigin: "200px 200px" }}
+          style={{ transformOrigin: "200px 200px", willChange: "transform" }}
         />
 
         {/* Orbiting Aura Sparks */}
         <motion.g
-          animate={{ rotate: 360 }}
+          animate={{ rotate: -360 }}
           transition={{
             duration: spinDuration * 0.8,
             repeat: Infinity,
             ease: "linear",
           }}
-          style={{ transformOrigin: "200px 200px" }}
+          style={{ transformOrigin: "200px 200px", willChange: "transform" }}
         >
           <circle cx="200" cy="52" r="2.5" fill="#fef08a" filter="url(#scChakraGlow)" />
           <circle cx="348" cy="200" r="2.2" fill="#22d3ee" filter="url(#scChakraGlow)" />
@@ -473,4 +472,4 @@ export const SudarshanChakra: React.FC<SudarshanChakraProps> = ({
       </svg>
     </div>
   );
-};
+});

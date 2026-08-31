@@ -1,37 +1,58 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { portfolioData } from '../data/portfolio';
 import { SudarshanChakra } from './SudarshanChakra';
-import { Menu, X, ArrowUpRight, Terminal, Github, Linkedin } from 'lucide-react';
+import { Menu, X, Github, Linkedin } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
   const { personal, contact, navigation } = portfolioData;
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeSection, setActiveSection] = useState('hero');
-  const [scrollProgress, setScrollProgress] = useState(0);
+  const progressBarRef = useRef<HTMLDivElement | null>(null);
 
-  // Scroll spy & progress calculation
+  // Optimized Scroll Spy & Progress Indicator using passive listeners + RAF throttle
   useEffect(() => {
     let ticking = false;
+    let currentActive = 'hero';
+
+    const sectionIds = [
+      'hero',
+      'about',
+      'journey',
+      'skills',
+      'lab',
+      'github-section',
+      'mindset',
+      'road-ahead',
+      'contact',
+    ];
 
     const handleScroll = () => {
       if (!ticking) {
         window.requestAnimationFrame(() => {
+          // Direct DOM update for the progress bar (zero React re-renders)
           const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
           const currentScroll = window.scrollY;
-          const progress = totalScroll > 0 ? (currentScroll / totalScroll) * 100 : 0;
-          setScrollProgress(progress);
+          const progress = totalScroll > 0 ? Math.min(100, Math.max(0, (currentScroll / totalScroll) * 100)) : 0;
+          
+          if (progressBarRef.current) {
+            progressBarRef.current.style.width = `${progress}%`;
+          }
 
-          const sectionIds = ['hero', 'about', 'journey', 'skills', 'lab', 'github-section', 'mindset', 'road-ahead', 'contact'];
+          // Optimized section detection
           for (let i = sectionIds.length - 1; i >= 0; i--) {
             const el = document.getElementById(sectionIds[i]);
             if (el) {
               const rect = el.getBoundingClientRect();
-              if (rect.top <= 160) {
-                setActiveSection(sectionIds[i]);
+              if (rect.top <= 200) {
+                if (currentActive !== sectionIds[i]) {
+                  currentActive = sectionIds[i];
+                  setActiveSection(sectionIds[i]);
+                }
                 break;
               }
             }
           }
+
           ticking = false;
         });
         ticking = true;
@@ -40,6 +61,7 @@ export const Navbar: React.FC = () => {
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
+
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -59,10 +81,11 @@ export const Navbar: React.FC = () => {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-40 transition-all duration-300">
-      {/* Scroll Progress Bar at Top */}
+      {/* Scroll Progress Bar at Top - GPU accelerated direct DOM update */}
       <div
-        className="h-[2px] bg-gradient-to-r from-amber-400 via-yellow-300 to-cyan-400 shadow-[0_0_10px_#f59e0b] transition-all duration-100 ease-out"
-        style={{ width: `${scrollProgress}%` }}
+        ref={progressBarRef}
+        className="h-[2px] w-0 bg-gradient-to-r from-amber-400 via-yellow-300 to-cyan-400 shadow-[0_0_10px_#f59e0b] transition-[width] duration-75 ease-out"
+        style={{ willChange: 'width' }}
       />
 
       {/* Main Frosted Glass Nav Bar */}
@@ -76,7 +99,7 @@ export const Navbar: React.FC = () => {
             onClick={(e) => handleNavClick(e, '#hero')}
             className="flex items-center gap-3 group cursor-pointer"
           >
-            <div className="relative w-8 h-8 rounded-full bg-amber-500/10 border border-amber-400/30 flex items-center justify-center transition-all group-hover:scale-105 group-hover:border-amber-400/60 shadow-[0_0_12px_rgba(245,158,11,0.15)]">
+            <div className="relative w-8 h-8 rounded-full bg-amber-500/10 border border-amber-400/30 flex items-center justify-center transition-transform group-hover:scale-105 group-hover:border-amber-400/60 shadow-[0_0_12px_rgba(245,158,11,0.15)]">
               <SudarshanChakra size={26} spinSpeed="fast" glowIntensity="subtle" />
             </div>
 
@@ -127,7 +150,7 @@ export const Navbar: React.FC = () => {
               rel="noopener noreferrer"
               title="GitHub: deba710"
               aria-label="GitHub Profile"
-              className="hidden sm:inline-flex items-center justify-center w-9 h-9 rounded-lg bg-white/[0.03] border border-white/[0.08] hover:border-cyan-400/50 text-neutral-300 hover:text-cyan-300 transition-all hover:scale-105"
+              className="hidden sm:inline-flex items-center justify-center w-9 h-9 rounded-lg bg-white/[0.03] border border-white/[0.08] hover:border-cyan-400/50 text-neutral-300 hover:text-cyan-300 transition-transform hover:scale-105"
             >
               <Github className="w-4 h-4" />
             </a>
@@ -140,7 +163,7 @@ export const Navbar: React.FC = () => {
               rel="noopener noreferrer"
               title="LinkedIn: Debangan Bera"
               aria-label="LinkedIn Profile"
-              className="hidden sm:inline-flex items-center justify-center w-9 h-9 rounded-lg bg-white/[0.03] border border-white/[0.08] hover:border-amber-400/50 text-neutral-300 hover:text-amber-300 transition-all hover:scale-105"
+              className="hidden sm:inline-flex items-center justify-center w-9 h-9 rounded-lg bg-white/[0.03] border border-white/[0.08] hover:border-amber-400/50 text-neutral-300 hover:text-amber-300 transition-transform hover:scale-105"
             >
               <Linkedin className="w-4 h-4" />
             </a>
@@ -150,7 +173,7 @@ export const Navbar: React.FC = () => {
               id="mobile-menu-toggle-button"
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg bg-white/[0.03] border border-white/[0.08] text-white hover:text-amber-300"
+              className="lg:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg bg-white/[0.03] border border-white/[0.08] text-white hover:text-amber-300 cursor-pointer"
               aria-label="Toggle Navigation Menu"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
@@ -174,7 +197,7 @@ export const Navbar: React.FC = () => {
                   id={`mobile-nav-link-${targetId}`}
                   href={item.href}
                   onClick={(e) => handleNavClick(e, item.href)}
-                  className={`px-4 py-3 rounded-lg uppercase tracking-wider flex items-center justify-between ${
+                  className={`px-4 py-3 rounded-lg uppercase tracking-wider flex items-center justify-between cursor-pointer ${
                     isActive
                       ? 'bg-amber-500/10 text-amber-300 border border-amber-400/30 font-bold'
                       : 'text-neutral-300 hover:text-white hover:bg-white/[0.03]'

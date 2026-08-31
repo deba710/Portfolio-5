@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { motion, useReducedMotion } from 'motion/react';
 import { portfolioData } from '../data/portfolio';
 import { PortraitImage } from './PortraitImage';
@@ -8,27 +8,56 @@ import { Code2, MapPin } from 'lucide-react';
 export const HeroVisual: React.FC = () => {
   const { personal } = portfolioData;
   const containerRef = useRef<HTMLDivElement | null>(null);
+  const portraitShellRef = useRef<HTMLDivElement | null>(null);
   const shouldReduceMotion = useReducedMotion();
 
-  // Mouse Parallax for subtle 3D depth on desktop
-  const [mouseOffset, setMouseOffset] = useState({ x: 0, y: 0 });
-  const [isHovered, setIsHovered] = useState(false);
+  // Mouse Parallax for subtle 3D depth on desktop only (GPU accelerated via RAF)
+  useEffect(() => {
+    if (shouldReduceMotion || window.matchMedia('(pointer: coarse)').matches) return;
 
-  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
-    if (shouldReduceMotion || window.innerWidth < 1024) return;
-    const rect = containerRef.current?.getBoundingClientRect();
-    if (!rect) return;
-    const centerX = rect.left + rect.width / 2;
-    const centerY = rect.top + rect.height / 2;
-    const dx = (e.clientX - centerX) / (rect.width / 2);
-    const dy = (e.clientY - centerY) / (rect.height / 2);
-    setMouseOffset({ x: dx * 8, y: dy * 8 });
-  };
+    const container = containerRef.current;
+    const portraitShell = portraitShellRef.current;
+    if (!container || !portraitShell) return;
 
-  const handleMouseLeave = () => {
-    setMouseOffset({ x: 0, y: 0 });
-    setIsHovered(false);
-  };
+    let targetRotX = 0;
+    let targetRotY = 0;
+    let currentRotX = 0;
+    let currentRotY = 0;
+    let rafId: number;
+
+    const handleMouseMove = (e: MouseEvent) => {
+      const rect = container.getBoundingClientRect();
+      const centerX = rect.left + rect.width / 2;
+      const centerY = rect.top + rect.height / 2;
+      const dx = (e.clientX - centerX) / (rect.width / 2);
+      const dy = (e.clientY - centerY) / (rect.height / 2);
+      targetRotX = dy * -3.2;
+      targetRotY = dx * 3.2;
+    };
+
+    const handleMouseLeave = () => {
+      targetRotX = 0;
+      targetRotY = 0;
+    };
+
+    const updateParallax = () => {
+      currentRotX += (targetRotX - currentRotX) * 0.15;
+      currentRotY += (targetRotY - currentRotY) * 0.15;
+
+      portraitShell.style.transform = `rotateX(${currentRotX.toFixed(2)}deg) rotateY(${currentRotY.toFixed(2)}deg)`;
+      rafId = requestAnimationFrame(updateParallax);
+    };
+
+    container.addEventListener('mousemove', handleMouseMove, { passive: true });
+    container.addEventListener('mouseleave', handleMouseLeave);
+    rafId = requestAnimationFrame(updateParallax);
+
+    return () => {
+      cancelAnimationFrame(rafId);
+      container.removeEventListener('mousemove', handleMouseMove);
+      container.removeEventListener('mouseleave', handleMouseLeave);
+    };
+  }, [shouldReduceMotion]);
 
   // Configuration for Satellite 3D Sudarshan Chakras (Separate decorative/cinematic visuals in surroundings)
   const satelliteChakras = [
@@ -122,9 +151,6 @@ export const HeroVisual: React.FC = () => {
   return (
     <div
       ref={containerRef}
-      onMouseMove={handleMouseMove}
-      onMouseEnter={() => setIsHovered(true)}
-      onMouseLeave={handleMouseLeave}
       className="relative w-full max-w-[340px] xs:max-w-[380px] sm:max-w-[440px] md:max-w-[480px] lg:max-w-[460px] xl:max-w-[500px] mx-auto flex flex-col items-center select-none"
       style={{ perspective: 1200 }}
     >
@@ -152,6 +178,7 @@ export const HeroVisual: React.FC = () => {
             style={{
               transformStyle: 'preserve-3d',
               opacity: sat.opacity,
+              willChange: 'transform',
             }}
             animate={
               shouldReduceMotion
@@ -191,11 +218,11 @@ export const HeroVisual: React.FC = () => {
       {/* No Chakra blades surrounding, behind, or overlapping photo */}
       {/* ============================================================ */}
       <div
+        ref={portraitShellRef}
         className="relative w-full max-w-[280px] xs:max-w-[310px] sm:max-w-[340px] md:max-w-[360px] aspect-square flex items-center justify-center z-20 my-1 sm:my-2"
         style={{
           transformStyle: 'preserve-3d',
-          transform: `rotateX(${mouseOffset.y * -0.4}deg) rotateY(${mouseOffset.x * 0.4}deg)`,
-          transition: 'transform 0.15s ease-out',
+          willChange: 'transform',
         }}
       >
         {/* Ambient Halo Glow */}
@@ -208,9 +235,10 @@ export const HeroVisual: React.FC = () => {
 
         {/* Micro Pulse Node on Orbit Ring */}
         <motion.div
-          animate={{ rotate: shouldReduceMotion ? 0 : 360 }}
+          animate={{ rotate: shouldReduceMotion ? 0 : -360 }}
           transition={{ duration: 24, repeat: Infinity, ease: 'linear' }}
           className="absolute inset-2 sm:inset-3 rounded-full pointer-events-none"
+          style={{ willChange: 'transform' }}
         >
           <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee] -top-[3px] left-1/2 -translate-x-1/2 absolute" />
           <div className="w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_#f59e0b] -bottom-[3px] left-1/2 -translate-x-1/2 absolute" />
