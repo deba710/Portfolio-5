@@ -1,9 +1,5 @@
-/**
- * @license
- * SPDX-License-Identifier: Apache-2.0
- */
-
-import React from 'react';
+import React, { useState } from 'react';
+import { CinematicIntro } from './components/CinematicIntro';
 import { BackgroundEffect } from './components/BackgroundEffect';
 import { CursorGlow } from './components/CursorGlow';
 import { Navbar } from './components/Navbar';
@@ -11,43 +7,46 @@ import { Hero } from './components/Hero';
 import { About } from './components/About';
 import { Journey } from './components/Journey';
 import { Skills } from './components/Skills';
-import { Projects } from './components/Projects';
-import { Milestones } from './components/Milestones';
-import { PersonalIdentity } from './components/PersonalIdentity';
-import { Interests } from './components/Interests';
-import { NorthStar } from './components/NorthStar';
-import { Resume } from './components/Resume';
+import { LearningLab } from './components/LearningLab';
+import { GitHubHighlight } from './components/GitHubHighlight';
+import { Mindset } from './components/Mindset';
+import { RoadAhead } from './components/RoadAhead';
 import { Contact } from './components/Contact';
 import { Footer } from './components/Footer';
 
 export default function App() {
-  return (
-    <div className="relative min-h-screen bg-[#050505] text-neutral-100 selection:bg-cyan-500/20 selection:text-cyan-200">
-      {/* Ambient background grid and blurred atmospheric lighting */}
-      <BackgroundEffect />
+  const [introCompleted, setIntroCompleted] = useState(false);
 
-      {/* Desktop pointer-following smooth glow */}
+  return (
+    <div className="relative min-h-screen bg-[#030305] text-neutral-100 selection:bg-amber-500/20 selection:text-amber-200">
+      {/* Cinematic Intro & Loading Experience (Sudarshan Chakra 0% -> 100% with Laser Slicing) */}
+      {!introCompleted && (
+        <CinematicIntro onComplete={() => setIntroCompleted(true)} />
+      )}
+
+      {/* Atmospheric Background Geometry & Cosmic Ambient Glow */}
+      <BackgroundEffect isRevealed={introCompleted} />
+
+      {/* Subtle Desktop Pointer Light (Gold/Cyan) */}
       <CursorGlow />
 
-      {/* Sticky frosted glass navbar with active spy and scroll progress */}
+      {/* Sticky Frosted Header Navbar */}
       <Navbar />
 
-      {/* Main content sections */}
+      {/* Main Content Sections with Chakra Design System */}
       <main className="relative z-10">
         <Hero />
         <About />
         <Journey />
         <Skills />
-        <Projects />
-        <Milestones />
-        <PersonalIdentity />
-        <Interests />
-        <NorthStar />
-        <Resume />
+        <LearningLab />
+        <GitHubHighlight />
+        <Mindset />
+        <RoadAhead />
         <Contact />
       </main>
 
-      {/* Distinctive Footer */}
+      {/* Cinematic Footer with Rotating Chakra */}
       <Footer />
     </div>
   );

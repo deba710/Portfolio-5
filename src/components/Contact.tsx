@@ -1,151 +1,150 @@
 import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { portfolioData } from '../data/portfolio';
+import { SudarshanChakra } from './SudarshanChakra';
 import { Mail, Github, Linkedin, ArrowUpRight, Copy, Check, Sparkles, MapPin } from 'lucide-react';
 
 export const Contact: React.FC = () => {
   const { contact } = portfolioData;
-  const [copied, setCopied] = useState(false);
+  const [copiedEmail, setCopiedEmail] = useState(false);
 
-  const handleCopyEmail = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
+  const copyEmailToClipboard = () => {
     navigator.clipboard.writeText(contact.email);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2500);
+    setCopiedEmail(true);
+    setTimeout(() => setCopiedEmail(false), 2500);
   };
 
-  const contactRows = [
+  const contactCards = [
     {
-      id: 'email-row',
-      label: 'EMAIL',
-      value: contact.email,
-      href: `mailto:${contact.email}`,
-      icon: <Mail className="w-5 h-5 text-cyan-400" />,
-      subtext: 'Direct communication & collaboration',
-      canCopy: true,
-    },
-    {
-      id: 'github-row',
-      label: 'GITHUB',
-      value: 'github.com/deba710',
+      id: 'github',
+      label: 'GITHUB PROFILE',
+      value: contact.githubHandle,
+      subtext: 'Repository logs & future Java code',
       href: contact.github,
-      icon: <Github className="w-5 h-5 text-sky-400" />,
-      subtext: 'Source code repositories & learning commits',
-      canCopy: false,
+      icon: <Github className="w-5 h-5 text-cyan-400" />,
+      actionText: 'VISIT GITHUB →',
+      isLink: true,
     },
     {
-      id: 'linkedin-row',
-      label: 'LINKEDIN',
-      value: 'Debangan Bera',
+      id: 'linkedin',
+      label: 'LINKEDIN NETWORK',
+      value: contact.linkedinName,
+      subtext: 'Professional networking & developer connections',
       href: contact.linkedin,
-      icon: <Linkedin className="w-5 h-5 text-indigo-400" />,
-      subtext: 'Professional network & student updates',
-      canCopy: false,
+      icon: <Linkedin className="w-5 h-5 text-amber-400" />,
+      actionText: 'CONNECT →',
+      isLink: true,
+    },
+    {
+      id: 'email',
+      label: 'EMAIL INQUIRY',
+      value: contact.email,
+      subtext: 'Direct communication & learning discussions',
+      href: `mailto:${contact.email}`,
+      icon: <Mail className="w-5 h-5 text-emerald-400" />,
+      actionText: 'SEND EMAIL →',
+      isLink: true,
+      canCopy: true,
     },
   ];
 
   return (
-    <section id="contact" className="py-24 sm:py-32 relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 border-t border-white/[0.06]">
-      
-      {/* Section Header */}
-      <div className="space-y-3 mb-16 sm:mb-20">
-        <div className="flex items-center gap-2 text-xs font-mono tracking-widest text-cyan-400 uppercase">
-          <span className="w-1.5 h-1.5 rounded-full bg-cyan-400" />
-          <span>{contact.sectionLabel}</span>
-        </div>
-        
-        <h2 className="font-display text-4xl sm:text-5xl lg:text-6xl font-extrabold text-white tracking-tight leading-[1.05] whitespace-pre-line">
-          {contact.heading}
-        </h2>
+    <section
+      id="contact"
+      className="py-24 sm:py-32 relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 border-t border-white/[0.06] overflow-hidden"
+    >
+      {/* Background Ambient Aura */}
+      <div className="absolute top-1/2 right-1/4 -translate-y-1/2 w-96 h-96 bg-amber-500/5 rounded-full blur-[140px] pointer-events-none" />
 
-        <p className="text-neutral-300 text-base sm:text-lg max-w-2xl font-normal pt-2">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-16">
+        <div>
+          <div className="flex items-center gap-3 mb-2">
+            <span className="w-2.5 h-2.5 rounded-full bg-amber-400 shadow-[0_0_8px_#f59e0b]" />
+            <span className="font-mono text-xs text-amber-300 font-semibold tracking-widest uppercase">
+              {contact.sectionLabel}
+            </span>
+          </div>
+          <h2 className="text-3xl sm:text-5xl font-extrabold font-display tracking-tight text-white uppercase leading-tight">
+            {contact.heading}
+          </h2>
+        </div>
+        <p className="font-mono text-xs text-neutral-400 max-w-md">
           {contact.description}
         </p>
       </div>
 
-      {/* Large Interactive Link Rows */}
-      <div className="space-y-4">
-        {contactRows.map((row, idx) => (
+      {/* Contact Cards Grid */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {contactCards.map((card, idx) => (
           <motion.div
-            key={row.id}
-            initial={{ opacity: 0, y: 15 }}
+            key={card.id}
+            initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.4, delay: idx * 0.1 }}
-            className="relative group rounded-2xl bg-[#080c15] border border-white/[0.08] hover:border-cyan-500/50 hover:bg-[#0b101e] transition-all duration-300 shadow-[0_10px_30px_rgba(0,0,0,0.4)] overflow-hidden"
+            viewport={{ once: true, margin: "-50px" }}
+            transition={{ duration: 0.5, delay: idx * 0.15 }}
+            className="group relative rounded-2xl p-7 bg-gradient-to-b from-white/[0.03] to-[#04060a] border border-white/[0.08] hover:border-amber-400/40 transition-all flex flex-col justify-between"
           >
-            {/* Subtle glow background on row hover */}
-            <div className="absolute inset-0 bg-gradient-to-r from-cyan-500/10 via-sky-500/5 to-transparent opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
-
-            <a
-              id={`contact-link-${row.id}`}
-              href={row.href}
-              target={row.href.startsWith('http') ? '_blank' : undefined}
-              rel="noopener noreferrer"
-              className="relative z-10 flex flex-col sm:flex-row sm:items-center justify-between p-6 sm:p-8 gap-4"
-            >
-              {/* Left Side: Icon, Label, and Value */}
-              <div className="flex items-start sm:items-center gap-4 sm:gap-6">
-                <div className="p-3 rounded-xl bg-white/[0.03] border border-white/[0.08] group-hover:border-cyan-500/40 transition-colors">
-                  {row.icon}
+            <div>
+              <div className="flex items-center justify-between mb-6 pb-4 border-b border-white/[0.06]">
+                <div className="w-10 h-10 rounded-xl bg-white/[0.03] border border-white/[0.08] flex items-center justify-center">
+                  {card.icon}
                 </div>
-
-                <div>
-                  <div className="flex items-center gap-3">
-                    <span className="text-xs font-mono tracking-widest uppercase text-cyan-400 font-bold">
-                      {row.label}
-                    </span>
-                    <span className="text-[11px] font-mono text-neutral-500 hidden md:inline">
-                      • {row.subtext}
-                    </span>
-                  </div>
-
-                  <div className="font-display text-xl sm:text-2xl lg:text-3xl font-bold text-white group-hover:text-cyan-200 transition-colors mt-1">
-                    {row.value}
-                  </div>
-                </div>
+                <span className="font-mono text-[10px] text-neutral-400 tracking-wider">
+                  0{idx + 1}
+                </span>
               </div>
 
-              {/* Right Side: Copy Button or Animated Arrow */}
-              <div className="flex items-center gap-3 self-end sm:self-center">
-                {row.canCopy && (
-                  <button
-                    type="button"
-                    onClick={handleCopyEmail}
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-white/[0.04] hover:bg-cyan-500/20 text-neutral-300 hover:text-cyan-300 border border-white/[0.1] text-xs font-mono transition-all cursor-pointer"
-                    title="Copy email to clipboard"
-                  >
-                    {copied ? (
-                      <>
-                        <Check className="w-3.5 h-3.5 text-emerald-400" />
-                        <span className="text-emerald-400">COPIED</span>
-                      </>
-                    ) : (
-                      <>
-                        <Copy className="w-3.5 h-3.5" />
-                        <span>COPY</span>
-                      </>
-                    )}
-                  </button>
-                )}
+              <span className="font-mono text-xs text-amber-300 font-semibold uppercase tracking-wider block">
+                {card.label}
+              </span>
 
-                <div className="w-10 h-10 rounded-full bg-white/[0.03] border border-white/[0.08] group-hover:border-cyan-500/40 flex items-center justify-center text-neutral-400 group-hover:text-cyan-400 group-hover:translate-x-1 group-hover:-translate-y-1 transition-all">
-                  <ArrowUpRight className="w-5 h-5" />
-                </div>
-              </div>
+              <h3 className="text-lg font-bold text-white font-mono mt-1 break-all">
+                {card.value}
+              </h3>
 
-            </a>
+              <p className="text-xs text-neutral-400 font-sans mt-2">
+                {card.subtext}
+              </p>
+            </div>
+
+            {/* Actions */}
+            <div className="mt-8 pt-4 border-t border-white/[0.06] flex items-center justify-between gap-3">
+              <a
+                id={`contact-link-${card.id}`}
+                href={card.href}
+                target={card.href.startsWith('mailto') ? '_self' : '_blank'}
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 text-xs font-mono font-semibold text-cyan-300 hover:text-white group-hover:translate-x-0.5 transition-all"
+              >
+                <span>{card.actionText}</span>
+                <ArrowUpRight className="w-3.5 h-3.5" />
+              </a>
+
+              {card.canCopy && (
+                <button
+                  type="button"
+                  onClick={copyEmailToClipboard}
+                  className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-white/[0.04] hover:bg-white/[0.08] text-white/70 hover:text-white font-mono text-[10px] border border-white/10 transition-colors"
+                  title="Copy email to clipboard"
+                >
+                  {copiedEmail ? (
+                    <>
+                      <Check className="w-3 h-3 text-emerald-400" />
+                      <span className="text-emerald-300">COPIED</span>
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="w-3 h-3" />
+                      <span>COPY</span>
+                    </>
+                  )}
+                </button>
+              )}
+            </div>
           </motion.div>
         ))}
       </div>
-
-      {/* Location Badge */}
-      <div className="mt-8 flex items-center gap-2 text-xs font-mono text-neutral-400">
-        <MapPin className="w-4 h-4 text-cyan-400" />
-        <span>Base of operations: <strong className="text-neutral-200">{contact.location}</strong></span>
-      </div>
-
     </section>
   );
 };

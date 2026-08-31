@@ -1,110 +1,98 @@
 import React, { useState, useEffect } from 'react';
-import { motion, AnimatePresence } from 'motion/react';
 import { portfolioData } from '../data/portfolio';
-import { PortraitImage } from './PortraitImage';
-import { Menu, X, ArrowUpRight, Terminal, Sparkles, Github, Linkedin } from 'lucide-react';
+import { SudarshanChakra } from './SudarshanChakra';
+import { Menu, X, ArrowUpRight, Terminal, Github, Linkedin } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
-  const [activeSection, setActiveSection] = useState('hero');
+  const { personal, contact, navigation } = portfolioData;
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [activeSection, setActiveSection] = useState('hero');
   const [scrollProgress, setScrollProgress] = useState(0);
-  const [timeString, setTimeString] = useState('');
-
-  // Live IST time indicator
-  useEffect(() => {
-    const updateTime = () => {
-      const options: Intl.DateTimeFormatOptions = {
-        timeZone: 'Asia/Kolkata',
-        hour: '2-digit',
-        minute: '2-digit',
-        second: '2-digit',
-        hour12: false,
-      };
-      setTimeString(new Intl.DateTimeFormat('en-GB', options).format(new Date()));
-    };
-
-    updateTime();
-    const interval = setInterval(updateTime, 1000);
-    return () => clearInterval(interval);
-  }, []);
 
   // Scroll spy & progress calculation
   useEffect(() => {
-    const handleScroll = () => {
-      const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
-      const currentScroll = window.scrollY;
-      const progress = totalScroll > 0 ? (currentScroll / totalScroll) * 100 : 0;
-      setScrollProgress(progress);
+    let ticking = false;
 
-      const sectionIds = ['hero', 'about', 'journey', 'skills', 'projects', 'milestones', 'identity', 'resume', 'contact'];
-      for (let i = sectionIds.length - 1; i >= 0; i--) {
-        const el = document.getElementById(sectionIds[i]);
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          if (rect.top <= window.innerHeight * 0.35) {
-            setActiveSection(sectionIds[i]);
-            break;
+    const handleScroll = () => {
+      if (!ticking) {
+        window.requestAnimationFrame(() => {
+          const totalScroll = document.documentElement.scrollHeight - window.innerHeight;
+          const currentScroll = window.scrollY;
+          const progress = totalScroll > 0 ? (currentScroll / totalScroll) * 100 : 0;
+          setScrollProgress(progress);
+
+          const sectionIds = ['hero', 'about', 'journey', 'skills', 'lab', 'github-section', 'mindset', 'road-ahead', 'contact'];
+          for (let i = sectionIds.length - 1; i >= 0; i--) {
+            const el = document.getElementById(sectionIds[i]);
+            if (el) {
+              const rect = el.getBoundingClientRect();
+              if (rect.top <= 160) {
+                setActiveSection(sectionIds[i]);
+                break;
+              }
+            }
           }
-        }
+          ticking = false;
+        });
+        ticking = true;
       }
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     const targetId = href.replace('#', '');
-    const element = document.getElementById(targetId);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
+    if (targetId === 'hero' || targetId === 'home') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      const element = document.getElementById(targetId);
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     }
     setMobileMenuOpen(false);
   };
 
   return (
-    <>
-      {/* Scroll Progress Bar at the top */}
-      <div className="fixed top-0 left-0 right-0 h-[2px] z-50 bg-white/[0.05]">
-        <motion.div
-          className="h-full bg-gradient-to-r from-cyan-400 via-sky-400 to-indigo-500 shadow-[0_0_10px_rgba(34,211,238,0.7)]"
-          style={{ width: `${scrollProgress}%` }}
-        />
-      </div>
+    <header className="fixed top-0 left-0 right-0 z-40 transition-all duration-300">
+      {/* Scroll Progress Bar at Top */}
+      <div
+        className="h-[2px] bg-gradient-to-r from-amber-400 via-yellow-300 to-cyan-400 shadow-[0_0_10px_#f59e0b] transition-all duration-100 ease-out"
+        style={{ width: `${scrollProgress}%` }}
+      />
 
-      {/* Main Sticky Navbar */}
-      <header className="fixed top-0 left-0 right-0 z-40 backdrop-blur-xl bg-[#050505]/85 border-b border-white/10 transition-all duration-300">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 h-20 flex items-center justify-between">
+      {/* Main Frosted Glass Nav Bar */}
+      <div className="bg-[#030305]/85 backdrop-blur-xl border-b border-white/[0.08] shadow-[0_4px_30px_rgba(0,0,0,0.6)]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 h-16 sm:h-18 flex items-center justify-between">
           
-          {/* Brand Monogram & Portrait Avatar */}
+          {/* Brand Identity / Monogram with Rotating Mini Chakra */}
           <a
             id="brand-logo-link"
             href="#hero"
             onClick={(e) => handleNavClick(e, '#hero')}
-            className="group flex items-center gap-3.5 text-white hover:text-cyan-400 transition-colors flex-shrink-0"
+            className="flex items-center gap-3 group cursor-pointer"
           >
-            <div className="w-9 h-9 sm:w-10 sm:h-10 border border-cyan-400/50 rounded-sm overflow-hidden flex items-center justify-center bg-cyan-400/5 group-hover:border-cyan-400 group-hover:shadow-[0_0_15px_rgba(34,211,238,0.4)] transition-all flex-shrink-0 relative">
-              <PortraitImage
-                alt={portfolioData.personal.name}
-                className="w-full h-full object-cover object-center pointer-events-none"
-                fallbackClassName="text-cyan-400 font-mono font-bold text-xl"
-                fallbackText="D"
-              />
+            <div className="relative w-8 h-8 rounded-full bg-amber-500/10 border border-amber-400/30 flex items-center justify-center transition-all group-hover:scale-105 group-hover:border-amber-400/60 shadow-[0_0_12px_rgba(245,158,11,0.15)]">
+              <SudarshanChakra size={26} spinSpeed="fast" glowIntensity="subtle" />
             </div>
+
             <div className="flex flex-col">
-              <span className="font-bold tracking-widest text-xs sm:text-sm uppercase text-white/90 font-display">
-                {portfolioData.personal.monogram}
+              <span className="font-mono text-xs sm:text-sm font-bold text-white tracking-widest uppercase group-hover:text-amber-300 transition-colors">
+                {personal.monogram}
               </span>
-              <span className="text-[9px] sm:text-[10px] font-mono text-cyan-400/80 tracking-[0.2em] uppercase">
-                Student • Java
+              <span className="text-[9px] font-mono text-cyan-400/80 tracking-wider">
+                {personal.currentFocus} LEARNER
               </span>
             </div>
           </a>
 
-          {/* Desktop Navigation Links (Responsive spacing across 1024px, 1280px, 1440px, 1920px) */}
-          <nav className="hidden lg:flex items-center gap-4 xl:gap-6 2xl:gap-8 text-[10px] xl:text-[11px] font-mono uppercase tracking-[0.15em] xl:tracking-[0.2em]">
-            {portfolioData.navigation.map((item) => {
+          {/* Desktop Navigation Links */}
+          <nav className="hidden lg:flex items-center gap-1 font-mono text-xs">
+            {navigation.map((item) => {
               const targetId = item.href.replace('#', '');
               const isActive = activeSection === targetId;
 
@@ -114,161 +102,116 @@ export const Navbar: React.FC = () => {
                   id={`nav-link-${targetId}`}
                   href={item.href}
                   onClick={(e) => handleNavClick(e, item.href)}
-                  className={`transition-colors relative py-1.5 whitespace-nowrap cursor-pointer ${
+                  className={`relative px-3.5 py-2 rounded-lg transition-all uppercase tracking-wider font-medium cursor-pointer ${
                     isActive
-                      ? 'text-cyan-400 font-bold'
-                      : 'text-white/60 hover:text-white'
+                      ? 'text-amber-300 bg-amber-500/10 border border-amber-400/30 shadow-[0_0_15px_rgba(245,158,11,0.1)]'
+                      : 'text-neutral-300 hover:text-white hover:bg-white/[0.04]'
                   }`}
                 >
-                  {item.label}
+                  <span>{item.label}</span>
                   {isActive && (
-                    <motion.div
-                      layoutId="activeIndicator"
-                      className="absolute -bottom-1 left-0 right-0 h-[2px] bg-cyan-400 shadow-[0_0_8px_#22d3ee]"
-                    />
+                    <span className="absolute bottom-0 left-1/2 -translate-x-1/2 w-4 h-[2px] bg-amber-400 rounded-full" />
                   )}
                 </a>
               );
             })}
           </nav>
 
-          {/* Technical Info Widget & Mobile Toggle */}
-          <div className="flex items-center gap-2.5 sm:gap-3 flex-shrink-0">
-            {/* Live Clock / Tech Status (Desktop) */}
-            <div className="hidden sm:flex items-center gap-2 px-2.5 sm:px-3 py-1.5 rounded-sm bg-white/5 border border-white/10 text-[10px] font-mono text-white/60 tracking-wider">
-              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse shadow-[0_0_6px_#06b6d4]"></span>
-              <span className="text-white/40 uppercase tracking-tight hidden md:inline">Status:</span>
-              <span className="text-cyan-400 uppercase font-semibold">Active</span>
-              <span className="text-white/20">|</span>
-              <span className="text-white/80">{timeString || 'LIVE'}</span>
-            </div>
+          {/* Social Profiles & Mobile Toggle */}
+          <div className="flex items-center gap-2.5">
+            {/* Desktop GitHub */}
+            <a
+              id="nav-social-github"
+              href={contact.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              title="GitHub: deba710"
+              aria-label="GitHub Profile"
+              className="hidden sm:inline-flex items-center justify-center w-9 h-9 rounded-lg bg-white/[0.03] border border-white/[0.08] hover:border-cyan-400/50 text-neutral-300 hover:text-cyan-300 transition-all hover:scale-105"
+            >
+              <Github className="w-4 h-4" />
+            </a>
 
-            {/* Desktop Social Profile Icons */}
-            <div className="hidden sm:flex items-center gap-1.5">
-              <a
-                id="nav-social-github"
-                href="https://github.com/deba710"
-                target="_blank"
-                rel="noopener noreferrer"
-                title="GitHub: deba710"
-                aria-label="GitHub Profile"
-                className="p-2 rounded-sm bg-white/5 border border-white/10 text-neutral-300 hover:text-cyan-400 hover:border-cyan-500/40 hover:bg-cyan-500/10 transition-colors"
-              >
-                <Github className="w-3.5 h-3.5" />
-              </a>
-              <a
-                id="nav-social-linkedin"
-                href="https://www.linkedin.com/in/debangan-bera-964648331/"
-                target="_blank"
-                rel="noopener noreferrer"
-                title="LinkedIn: Debangan Bera"
-                aria-label="LinkedIn Profile"
-                className="p-2 rounded-sm bg-white/5 border border-white/10 text-neutral-300 hover:text-cyan-400 hover:border-cyan-500/40 hover:bg-cyan-500/10 transition-colors"
-              >
-                <Linkedin className="w-3.5 h-3.5" />
-              </a>
-            </div>
+            {/* Desktop LinkedIn */}
+            <a
+              id="nav-social-linkedin"
+              href={contact.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              title="LinkedIn: Debangan Bera"
+              aria-label="LinkedIn Profile"
+              className="hidden sm:inline-flex items-center justify-center w-9 h-9 rounded-lg bg-white/[0.03] border border-white/[0.08] hover:border-amber-400/50 text-neutral-300 hover:text-amber-300 transition-all hover:scale-105"
+            >
+              <Linkedin className="w-4 h-4" />
+            </a>
 
-            {/* Mobile Menu Button */}
+            {/* Mobile Menu Toggle Button */}
             <button
               id="mobile-menu-toggle-button"
               type="button"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="lg:hidden p-2 rounded-lg bg-neutral-900 border border-white/10 text-neutral-300 hover:text-cyan-400 hover:border-cyan-500/40 focus:outline-none transition-colors cursor-pointer"
-              aria-label="Toggle navigation menu"
+              className="lg:hidden inline-flex items-center justify-center w-10 h-10 rounded-lg bg-white/[0.03] border border-white/[0.08] text-white hover:text-amber-300"
+              aria-label="Toggle Navigation Menu"
             >
               {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
           </div>
+
         </div>
-      </header>
+      </div>
 
-      {/* Mobile Fullscreen Animated Menu */}
-      <AnimatePresence>
-        {mobileMenuOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.25, ease: "easeOut" }}
-            className="fixed inset-0 z-35 bg-[#05070c]/98 backdrop-blur-2xl lg:hidden pt-24 px-6 pb-10 flex flex-col justify-between overflow-y-auto"
-          >
-            {/* Background grid details in mobile menu */}
-            <div className="absolute inset-0 tech-grid opacity-30 pointer-events-none" />
+      {/* Mobile Menu Drawer */}
+      {mobileMenuOpen && (
+        <div className="lg:hidden bg-[#030305]/98 border-b border-white/10 px-6 py-6 space-y-4 backdrop-blur-2xl animate-in slide-in-from-top-4 duration-200">
+          <nav className="flex flex-col space-y-2 font-mono text-xs">
+            {navigation.map((item) => {
+              const targetId = item.href.replace('#', '');
+              const isActive = activeSection === targetId;
 
-            <div className="relative z-10 space-y-6">
-              <div className="text-[11px] font-mono uppercase tracking-widest text-cyan-400/70 border-b border-white/10 pb-3 flex items-center justify-between">
-                <span>NAVIGATION INDEX</span>
-                <span>01 — 08</span>
-              </div>
+              return (
+                <a
+                  key={item.label}
+                  id={`mobile-nav-link-${targetId}`}
+                  href={item.href}
+                  onClick={(e) => handleNavClick(e, item.href)}
+                  className={`px-4 py-3 rounded-lg uppercase tracking-wider flex items-center justify-between ${
+                    isActive
+                      ? 'bg-amber-500/10 text-amber-300 border border-amber-400/30 font-bold'
+                      : 'text-neutral-300 hover:text-white hover:bg-white/[0.03]'
+                  }`}
+                >
+                  <span>{item.label}</span>
+                  {isActive && <span className="w-1.5 h-1.5 rounded-full bg-amber-400" />}
+                </a>
+              );
+            })}
+          </nav>
 
-              <div className="grid grid-cols-1 gap-2">
-                {portfolioData.navigation.map((item, idx) => {
-                  const targetId = item.href.replace('#', '');
-                  const isActive = activeSection === targetId;
-
-                  return (
-                    <a
-                      key={item.label}
-                      id={`mobile-nav-link-${targetId}`}
-                      href={item.href}
-                      onClick={(e) => handleNavClick(e, item.href)}
-                      className={`flex items-center justify-between p-3 rounded-lg border transition-all ${
-                        isActive
-                          ? 'bg-cyan-950/40 border-cyan-500/40 text-cyan-300'
-                          : 'bg-white/[0.02] border-white/[0.06] text-neutral-300 hover:border-white/20'
-                      }`}
-                    >
-                      <div className="flex items-center gap-3">
-                        <span className="font-mono text-xs text-neutral-500">0{idx + 1}</span>
-                        <span className="font-display font-bold text-lg tracking-wide">{item.label}</span>
-                      </div>
-                      <ArrowUpRight className={`w-4 h-4 ${isActive ? 'text-cyan-400' : 'text-neutral-600'}`} />
-                    </a>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Mobile Social Links & Footer info */}
-            <div className="relative z-10 pt-6 mt-6 border-t border-white/10 flex flex-col gap-4 font-mono text-xs text-neutral-400">
-              <div className="flex items-center justify-between">
-                <span className="text-[10px] text-white/40 uppercase tracking-widest">PROFILES</span>
-                <div className="flex items-center gap-2">
-                  <a
-                    id="mobile-social-github"
-                    href="https://github.com/deba710"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-white/5 border border-white/10 text-neutral-200 hover:text-cyan-400 text-xs transition-colors"
-                  >
-                    <Github className="w-3.5 h-3.5 text-cyan-400" />
-                    <span>GitHub</span>
-                  </a>
-                  <a
-                    id="mobile-social-linkedin"
-                    href="https://www.linkedin.com/in/debangan-bera-964648331/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-white/5 border border-white/10 text-neutral-200 hover:text-cyan-400 text-xs transition-colors"
-                  >
-                    <Linkedin className="w-3.5 h-3.5 text-cyan-400" />
-                    <span>LinkedIn</span>
-                  </a>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between pt-2 border-t border-white/5">
-                <span>STUDENT • JAVA LEARNER</span>
-                <span className="text-cyan-400 font-semibold">{timeString} IST</span>
-              </div>
-              <div className="text-[11px] text-neutral-500">
-                {portfolioData.personal.location}
-              </div>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </>
+          {/* Mobile Socials */}
+          <div className="pt-4 border-t border-white/10 flex items-center gap-3">
+            <a
+              id="mobile-social-github"
+              href={contact.github}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg bg-white/[0.03] border border-white/[0.08] text-xs font-mono text-neutral-300"
+            >
+              <Github className="w-4 h-4 text-cyan-400" />
+              <span>GitHub</span>
+            </a>
+            <a
+              id="mobile-social-linkedin"
+              href={contact.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex-1 flex items-center justify-center gap-2 py-2.5 rounded-lg bg-white/[0.03] border border-white/[0.08] text-xs font-mono text-neutral-300"
+            >
+              <Linkedin className="w-4 h-4 text-amber-400" />
+              <span>LinkedIn</span>
+            </a>
+          </div>
+        </div>
+      )}
+    </header>
   );
 };

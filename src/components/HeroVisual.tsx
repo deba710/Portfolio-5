@@ -1,107 +1,291 @@
-import React from 'react';
-import { motion } from 'motion/react';
+import React, { useState, useRef } from 'react';
+import { motion, useReducedMotion } from 'motion/react';
 import { portfolioData } from '../data/portfolio';
 import { PortraitImage } from './PortraitImage';
+import { SudarshanChakra } from './SudarshanChakra';
+import { Code2, MapPin } from 'lucide-react';
 
 export const HeroVisual: React.FC = () => {
   const { personal } = portfolioData;
+  const containerRef = useRef<HTMLDivElement | null>(null);
+  const shouldReduceMotion = useReducedMotion();
+
+  // Mouse Parallax for subtle 3D depth on desktop
+  const [mouseOffset, setMouseOffset] = useState({ x: 0, y: 0 });
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (shouldReduceMotion || window.innerWidth < 1024) return;
+    const rect = containerRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    const centerX = rect.left + rect.width / 2;
+    const centerY = rect.top + rect.height / 2;
+    const dx = (e.clientX - centerX) / (rect.width / 2);
+    const dy = (e.clientY - centerY) / (rect.height / 2);
+    setMouseOffset({ x: dx * 8, y: dy * 8 });
+  };
+
+  const handleMouseLeave = () => {
+    setMouseOffset({ x: 0, y: 0 });
+    setIsHovered(false);
+  };
+
+  // Configuration for Satellite 3D Sudarshan Chakras (Separate decorative/cinematic visuals in surroundings)
+  const satelliteChakras = [
+    {
+      id: 'sat-1',
+      size: 96,
+      desktopPos: 'top-[-4%] left-[-10%]',
+      mobilePos: 'top-[-4%] left-[-2%]',
+      rotateX: 42,
+      rotateY: -45,
+      rotateZ: 16,
+      scale: 0.9,
+      opacity: 0.65,
+      blur: 'blur-[0.5px]',
+      orbitDuration: 18,
+      yDrift: [-8, 8, -8],
+      xDrift: [-4, 4, -4],
+      spinSpeed: 'slow' as const,
+      depthZ: -60,
+    },
+    {
+      id: 'sat-2',
+      size: 110,
+      desktopPos: 'top-[-2%] right-[-12%]',
+      mobilePos: 'top-[-2%] right-[-4%]',
+      rotateX: -32,
+      rotateY: 55,
+      rotateZ: -24,
+      scale: 0.95,
+      opacity: 0.7,
+      blur: 'blur-none',
+      orbitDuration: 22,
+      yDrift: [10, -10, 10],
+      xDrift: [5, -5, 5],
+      spinSpeed: 'normal' as const,
+      depthZ: -30,
+    },
+    {
+      id: 'sat-3',
+      size: 88,
+      desktopPos: 'bottom-[16%] right-[-14%]',
+      mobilePos: 'hidden md:block bottom-[16%] right-[-14%]',
+      rotateX: 58,
+      rotateY: 28,
+      rotateZ: 42,
+      scale: 0.82,
+      opacity: 0.55,
+      blur: 'blur-[0.5px]',
+      orbitDuration: 20,
+      yDrift: [-6, 6, -6],
+      xDrift: [-6, 6, -6],
+      spinSpeed: 'slow' as const,
+      depthZ: 20,
+    },
+    {
+      id: 'sat-4',
+      size: 82,
+      desktopPos: 'bottom-[20%] left-[-12%]',
+      mobilePos: 'bottom-[18%] left-[-4%]',
+      rotateX: -45,
+      rotateY: -35,
+      rotateZ: -15,
+      scale: 0.78,
+      opacity: 0.5,
+      blur: 'blur-[1px]',
+      orbitDuration: 24,
+      yDrift: [8, -8, 8],
+      xDrift: [4, -4, 4],
+      spinSpeed: 'ultra-slow' as const,
+      depthZ: -80,
+    },
+    {
+      id: 'sat-5',
+      size: 68,
+      desktopPos: 'top-[42%] left-[-18%] hidden xl:block',
+      mobilePos: 'hidden',
+      rotateX: 20,
+      rotateY: 72,
+      rotateZ: 8,
+      scale: 0.65,
+      opacity: 0.4,
+      blur: 'blur-[1.5px]',
+      orbitDuration: 26,
+      yDrift: [-10, 10, -10],
+      xDrift: [-3, 3, -3],
+      spinSpeed: 'slow' as const,
+      depthZ: -140,
+    },
+  ];
 
   return (
-    <div className="relative w-full max-w-[420px] mx-auto select-none flex items-center justify-center overflow-visible">
-      {/* Surrounding concentric ambient circular wireframes constrained to prevent horizontal bleed */}
-      <div className="absolute w-[440px] sm:w-[480px] h-[440px] sm:h-[480px] border border-white/5 rounded-full opacity-40 pointer-events-none" />
-      <div className="absolute w-[520px] sm:w-[560px] h-[520px] sm:h-[560px] border border-white/5 rounded-full opacity-20 pointer-events-none hidden sm:block" />
+    <div
+      ref={containerRef}
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setIsHovered(true)}
+      onMouseLeave={handleMouseLeave}
+      className="relative w-full max-w-[340px] xs:max-w-[380px] sm:max-w-[440px] md:max-w-[480px] lg:max-w-[460px] xl:max-w-[500px] mx-auto flex flex-col items-center select-none"
+      style={{ perspective: 1200 }}
+    >
+      {/* ============================================================ */}
+      {/* 1. TOP HEADER BADGE */}
+      {/* ============================================================ */}
+      <div className="text-center mb-4 sm:mb-5 space-y-1 relative z-30">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-400/25 text-amber-300 font-mono text-[10px] sm:text-xs tracking-widest uppercase shadow-[0_0_15px_rgba(245,158,11,0.15)]">
+          <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse shadow-[0_0_8px_#f59e0b]" />
+          <span className="font-bold">SYSTEMS & AI DEV</span>
+        </div>
+        <p className="text-[10px] sm:text-[11px] font-mono text-cyan-300/80 tracking-widest uppercase">
+          COSMIC ARCHITECT
+        </p>
+      </div>
 
-      {/* Main Holographic Profile Card */}
-      <motion.div
-        initial={{ opacity: 0, scale: 0.96 }}
-        animate={{ opacity: 1, scale: 1 }}
-        transition={{ duration: 0.7, ease: "easeOut" }}
-        whileHover={{ y: -4 }}
-        className="w-full sm:w-[400px] lg:w-full min-h-[480px] sm:min-h-[500px] border border-white/10 bg-[#090d16]/80 backdrop-blur-xl rounded-2xl flex flex-col p-6 sm:p-7 shadow-2xl relative overflow-hidden group"
+      {/* ============================================================ */}
+      {/* 2. SATELLITE 3D SUDARSHAN CHAKRAS (Separate Celestial Visuals) */}
+      {/* ============================================================ */}
+      <div className="absolute inset-0 pointer-events-none z-10" style={{ transformStyle: 'preserve-3d' }}>
+        {satelliteChakras.map((sat) => (
+          <motion.div
+            key={sat.id}
+            className={`absolute ${sat.desktopPos} ${sat.mobilePos} ${sat.blur} pointer-events-none transition-opacity duration-700`}
+            style={{
+              transformStyle: 'preserve-3d',
+              opacity: sat.opacity,
+            }}
+            animate={
+              shouldReduceMotion
+                ? {}
+                : {
+                    y: sat.yDrift,
+                    x: sat.xDrift,
+                  }
+            }
+            transition={{
+              duration: sat.orbitDuration,
+              repeat: Infinity,
+              ease: 'easeInOut',
+            }}
+          >
+            {/* 3D Angled Transform Shell */}
+            <div
+              style={{
+                transform: `perspective(700px) translateZ(${sat.depthZ}px) rotateX(${sat.rotateX}deg) rotateY(${sat.rotateY}deg) rotateZ(${sat.rotateZ}deg) scale(${sat.scale})`,
+                transformStyle: 'preserve-3d',
+              }}
+              className="relative drop-shadow-[0_8px_25px_rgba(0,0,0,0.8)]"
+            >
+              <SudarshanChakra
+                size={sat.size}
+                spinSpeed={sat.spinSpeed}
+                glowIntensity="subtle"
+                variant="3d-satellite"
+              />
+            </div>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* ============================================================ */}
+      {/* 3. INDEPENDENT CIRCULAR PORTRAIT (CLEAN CENTERED STANDALONE) */}
+      {/* No Chakra blades surrounding, behind, or overlapping photo */}
+      {/* ============================================================ */}
+      <div
+        className="relative w-full max-w-[280px] xs:max-w-[310px] sm:max-w-[340px] md:max-w-[360px] aspect-square flex items-center justify-center z-20 my-1 sm:my-2"
+        style={{
+          transformStyle: 'preserve-3d',
+          transform: `rotateX(${mouseOffset.y * -0.4}deg) rotateY(${mouseOffset.x * 0.4}deg)`,
+          transition: 'transform 0.15s ease-out',
+        }}
       >
-        {/* Top Right Profile ID coordinate */}
-        <div className="absolute top-0 right-0 p-5 font-mono text-[9px] text-white/30 uppercase tracking-[0.2em]">
-          Profile ID: {personal.coordinates || '22.5726° N'}
+        {/* Ambient Halo Glow */}
+        <div className="absolute inset-4 rounded-full bg-gradient-to-tr from-amber-500/20 via-yellow-400/10 to-cyan-500/20 blur-3xl pointer-events-none" />
+        <div className="absolute inset-10 rounded-full bg-amber-400/10 blur-xl pointer-events-none" />
+
+        {/* Subtle Fine Tech Orbital Guide Rings (Unobtrusive framing without blades) */}
+        <div className="absolute inset-2 sm:inset-3 rounded-full border border-white/[0.06] pointer-events-none" />
+        <div className="absolute inset-6 sm:inset-7 rounded-full border border-dashed border-amber-400/15 pointer-events-none" />
+
+        {/* Micro Pulse Node on Orbit Ring */}
+        <motion.div
+          animate={{ rotate: shouldReduceMotion ? 0 : 360 }}
+          transition={{ duration: 24, repeat: Infinity, ease: 'linear' }}
+          className="absolute inset-2 sm:inset-3 rounded-full pointer-events-none"
+        >
+          <div className="w-1.5 h-1.5 rounded-full bg-cyan-400 shadow-[0_0_8px_#22d3ee] -top-[3px] left-1/2 -translate-x-1/2 absolute" />
+          <div className="w-1.5 h-1.5 rounded-full bg-amber-400 shadow-[0_0_8px_#f59e0b] -bottom-[3px] left-1/2 -translate-x-1/2 absolute" />
+        </motion.div>
+
+        {/* Clean Independent Circular Portrait Frame */}
+        <div className="relative w-[180px] xs:w-[200px] sm:w-[220px] md:w-[230px] lg:w-[225px] xl:w-[240px] aspect-square rounded-full p-[3.5px] sm:p-1 bg-gradient-to-tr from-amber-500 via-yellow-300 to-cyan-400 shadow-[0_0_40px_rgba(245,158,11,0.45),0_0_20px_rgba(6,182,212,0.3)]">
+          {/* Thin Dark Separator Ring */}
+          <div className="w-full h-full rounded-full p-[2.5px] bg-[#030305]">
+            {/* Inner Luminous Cyan/Emerald Bezel */}
+            <div className="w-full h-full rounded-full p-[1.5px] bg-gradient-to-b from-cyan-400/90 via-amber-400/70 to-emerald-400/90">
+              {/* Pure Circular Mask for Debangan's Real Portrait (Static, Centered, No Rotation) */}
+              <div className="w-full h-full rounded-full overflow-hidden bg-[#070b14] relative flex items-center justify-center shadow-inner border border-black/80">
+                <PortraitImage
+                  alt="Debangan Bera"
+                  className="w-full h-full object-cover object-center rounded-full"
+                  fallbackText="D"
+                  fallbackClassName="text-4xl sm:text-5xl font-display font-black text-amber-300 tracking-wider select-none"
+                />
+
+                {/* Soft Edge Vignette for depth */}
+                <div className="absolute inset-0 rounded-full bg-gradient-to-t from-black/20 via-transparent to-black/10 pointer-events-none" />
+              </div>
+            </div>
+          </div>
+
+          {/* 4 Cardinal Precision Axis Nodes */}
+          <div className="absolute -top-1 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-amber-300 shadow-[0_0_8px_#f59e0b]" />
+          <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-cyan-300 shadow-[0_0_8px_#06b6d4]" />
+          <div className="absolute top-1/2 -left-1 -translate-y-1/2 w-2 h-2 rounded-full bg-amber-300 shadow-[0_0_8px_#f59e0b]" />
+          <div className="absolute top-1/2 -right-1 -translate-y-1/2 w-2 h-2 rounded-full bg-cyan-300 shadow-[0_0_8px_#06b6d4]" />
         </div>
+      </div>
 
-        {/* Fixed Non-Interactive Circular portrait frame */}
-        <div className="w-20 h-20 sm:w-22 sm:h-22 border border-white/20 rounded-full flex items-center justify-center mb-5 relative">
-          {/* Subtle surrounding glow ring */}
-          <div className="absolute inset-0 rounded-full border border-cyan-400/20 shadow-[0_0_20px_rgba(34,211,238,0.25)] pointer-events-none" />
-
-          <div className="w-18 h-18 sm:w-20 sm:h-20 bg-neutral-900 rounded-full overflow-hidden flex items-center justify-center border border-cyan-400/30 shadow-[0_0_20px_rgba(34,211,238,0.2)] relative">
-            <PortraitImage
-              alt={personal.name}
-              className="w-full h-full object-cover object-center rounded-full pointer-events-none"
-              fallbackClassName="text-3xl sm:text-4xl font-serif italic text-white"
-              fallbackText="D"
-            />
-          </div>
-        </div>
-
-        {/* Name and Designation */}
-        <h2 className="text-2xl sm:text-3xl font-bold tracking-tight mb-1 uppercase text-white font-display">
-          {personal.name}
-        </h2>
-        <span className="font-mono text-[11px] sm:text-xs text-cyan-400 mb-5 block uppercase tracking-[0.2em]">
-          [ Beginner Programmer ]
-        </span>
-
-        {/* Data Specification Rows */}
-        <div className="space-y-3.5 font-mono text-xs">
-          <div className="flex justify-between items-end border-b border-white/10 pb-3">
-            <div>
-              <span className="text-[10px] text-white/40 block uppercase tracking-wider">PRIMARY TECH</span>
-              <span className="text-xs sm:text-sm text-neutral-100 font-semibold font-sans">Java SE</span>
-            </div>
-            <div className="text-right">
-              <span className="text-[10px] text-cyan-400 uppercase tracking-widest font-semibold">PRACTICING</span>
-            </div>
-          </div>
-
-          <div className="flex justify-between items-end border-b border-white/10 pb-3">
-            <div>
-              <span className="text-[10px] text-white/40 block uppercase tracking-wider">METHODOLOGY</span>
-              <span className="text-xs sm:text-sm text-neutral-100 font-semibold font-sans">Problem Solving</span>
-            </div>
-            <div className="text-right">
-              <span className="text-[10px] text-white/40 uppercase tracking-widest">EXPLORING</span>
-            </div>
-          </div>
-
-          <div className="flex justify-between items-end border-b border-white/10 pb-3">
-            <div>
-              <span className="text-[10px] text-white/40 block uppercase tracking-wider">REPOSITORY</span>
-              <a 
-                id="hero-visual-github-link"
-                href="https://github.com/deba710"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-xs sm:text-sm text-neutral-200 hover:text-cyan-300 italic underline underline-offset-2 transition-colors font-sans"
-              >
-                /github/deba710
-              </a>
-            </div>
-            <div className="text-right">
-              <span className="text-[10px] text-cyan-300 uppercase tracking-widest font-semibold">VIEW GITHUB</span>
-            </div>
-          </div>
-        </div>
-
-        {/* Progress Gauge */}
-        <div className="mt-auto pt-6 flex items-center gap-3">
-          <div className="h-1 w-full bg-white/10 rounded-full overflow-hidden">
-            <div className="h-full bg-cyan-400 w-1/3 shadow-[0_0_8px_rgba(34,211,238,0.6)]"></div>
-          </div>
-          <span className="font-mono text-[10px] text-white/40 whitespace-nowrap uppercase tracking-widest">
-            Level 01
+      {/* ============================================================ */}
+      {/* 4. PROFILE IDENTITY INFORMATION (BELOW PORTRAIT) */}
+      {/* ============================================================ */}
+      <div className="w-full mt-3 sm:mt-4 text-center space-y-2 relative z-30">
+        {/* Name */}
+        <h3 className="text-xl sm:text-2xl xl:text-3xl font-extrabold font-display tracking-wider text-white uppercase leading-tight">
+          <span className="bg-gradient-to-r from-white via-neutral-100 to-amber-200 bg-clip-text text-transparent">
+            {personal.name}
           </span>
-        </div>
+        </h3>
 
-        {/* Ambient warm orange blur in corner */}
-        <div className="absolute -bottom-10 -right-10 w-36 h-36 bg-orange-500/10 rounded-full blur-3xl pointer-events-none" />
-      </motion.div>
+        {/* Role & Status */}
+        <p className="text-xs sm:text-sm font-mono font-semibold text-amber-400 tracking-wide uppercase">
+          {personal.role}
+        </p>
+
+        {/* Supporting Telemetry Badges: Core Focus & Location */}
+        <div className="pt-2 grid grid-cols-2 gap-2 sm:gap-3 max-w-sm mx-auto text-left font-mono text-[10px] sm:text-xs">
+          {/* Core Focus */}
+          <div className="p-2.5 rounded-xl bg-white/[0.03] border border-amber-400/20 flex flex-col justify-center">
+            <span className="text-[9px] sm:text-[10px] text-white/40 uppercase tracking-wider flex items-center gap-1">
+              <Code2 className="w-3 h-3 text-amber-400" />
+              <span>CORE FOCUS</span>
+            </span>
+            <span className="font-bold text-amber-300 mt-0.5 tracking-wider">
+              {personal.currentFocus.toUpperCase()} LEARNING
+            </span>
+          </div>
+
+          {/* Location */}
+          <div className="p-2.5 rounded-xl bg-white/[0.03] border border-cyan-400/20 flex flex-col justify-center">
+            <span className="text-[9px] sm:text-[10px] text-white/40 uppercase tracking-wider flex items-center gap-1">
+              <MapPin className="w-3 h-3 text-cyan-400" />
+              <span>LOCATION</span>
+            </span>
+            <span className="font-bold text-cyan-300 mt-0.5 tracking-wider truncate">
+              {personal.location.toUpperCase()}
+            </span>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };

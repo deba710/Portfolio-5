@@ -2,140 +2,146 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { portfolioData } from '../data/portfolio';
 import { HeroVisual } from './HeroVisual';
-import { ArrowRight, Terminal, MapPin, Sparkles, ChevronDown } from 'lucide-react';
+import { SudarshanChakra } from './SudarshanChakra';
+import { ArrowRight, Compass, Sparkles, Terminal, Shield, ChevronDown } from 'lucide-react';
 
 export const Hero: React.FC = () => {
   const { personal } = portfolioData;
 
   const scrollToSection = (e: React.MouseEvent<HTMLAnchorElement>, id: string) => {
     e.preventDefault();
-    const el = document.getElementById(id);
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth' });
+    if (id === 'hero' || id === 'home') {
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } else {
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
     }
   };
 
   return (
     <section
       id="hero"
-      className="relative min-h-[90vh] lg:min-h-[calc(100vh-5rem)] pt-28 pb-12 sm:pt-32 sm:pb-16 lg:pt-28 lg:pb-12 flex flex-col justify-center max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12 overflow-hidden"
+      className="relative min-h-[92vh] sm:min-h-screen flex items-center justify-center pt-24 sm:pt-28 pb-16 overflow-hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 xl:px-12"
     >
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-8 xl:gap-12 items-center my-auto">
+      {/* ============================================================ */}
+      {/* BACKGROUND FAINT SUDARSHAN CHAKRA SILHOUETTE */}
+      {/* ============================================================ */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 pointer-events-none opacity-20 sm:opacity-25 z-0">
+        <SudarshanChakra
+          size={window.innerWidth < 640 ? 550 : 850}
+          spinSpeed="ultra-slow"
+          glowIntensity="cosmic"
+        />
+      </div>
+
+      {/* Ambient Cosmic Lighting */}
+      <div className="absolute top-1/3 left-1/4 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-amber-500/10 rounded-full blur-[140px] pointer-events-none" />
+      <div className="absolute bottom-1/4 right-1/4 translate-x-1/2 translate-y-1/2 w-96 h-96 bg-cyan-500/10 rounded-full blur-[140px] pointer-events-none" />
+
+      {/* Main Grid Layout: Left Content, Right Identity Card */}
+      <div className="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center w-full">
         
-        {/* Left Column: Hero Typography & CTAs (7 cols on desktop) */}
-        <div className="lg:col-span-7 flex flex-col justify-center z-10">
-          
-          {/* Small Technical Status Label */}
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="mb-5 sm:mb-6"
-          >
-            <span className="inline-flex items-center gap-2 font-mono text-[11px] sm:text-xs text-cyan-400 uppercase tracking-[0.25em] bg-cyan-400/10 px-3.5 py-1.5 rounded-sm border border-cyan-400/20 shadow-[0_0_15px_rgba(34,211,238,0.15)]">
-              <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-              Student / Java Learner
-            </span>
-          </motion.div>
+        {/* Left Column (7 cols): Typographic Hero & Statement */}
+        <motion.div
+          initial={{ opacity: 0, y: 25 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
+          className="lg:col-span-7 space-y-6 sm:space-y-8 text-center lg:text-left"
+        >
+          {/* Status Badge with Mini Chakra */}
+          <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-amber-500/10 border border-amber-400/25 text-amber-300 font-mono text-xs tracking-wider">
+            <span className="w-2 h-2 rounded-full bg-amber-400 animate-pulse shadow-[0_0_8px_#f59e0b]" />
+            <span className="uppercase font-semibold">{personal.role}</span>
+          </div>
 
-          {/* Main Display Name (Heroic Monumental Title - Scaled with clamp and responsive breakpoints) */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.55, delay: 0.1 }}
-            className="mb-6 sm:mb-7"
-          >
-            <h1 className="text-4xl sm:text-6xl md:text-7xl lg:text-7xl xl:text-[84px] 2xl:text-[96px] font-black leading-none tracking-tighter text-white uppercase select-none break-normal">
-              DEBANGAN
+          {/* Large Main Name */}
+          <div className="space-y-2">
+            <h1 className="text-4xl sm:text-6xl xl:text-7xl font-extrabold tracking-tight font-display text-white uppercase leading-none">
+              <span className="bg-gradient-to-r from-white via-neutral-100 to-white/70 bg-clip-text text-transparent">
+                {personal.heroHeading}
+              </span>
             </h1>
-          </motion.div>
 
-          {/* Authentic Description with Vertical Accent Line */}
-          <motion.p
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.55, delay: 0.2 }}
-            className="text-base sm:text-lg lg:text-lg xl:text-xl font-light text-white/80 leading-relaxed mb-8 sm:mb-10 max-w-xl border-l-2 border-cyan-400/40 pl-5 sm:pl-6 italic"
-          >
-            Learning. Building. Becoming.<br />
-            <span className="text-white/60 not-italic font-normal text-sm sm:text-base">
-              Developing software fundamentals and problem solving one step at a time from West Bengal, India.
-            </span>
-          </motion.p>
+            {/* 4 Statement Words */}
+            <div className="flex flex-wrap items-center justify-center lg:justify-start gap-x-3 gap-y-1 text-base sm:text-xl xl:text-2xl font-bold font-mono tracking-wide text-cyan-300">
+              {personal.heroKeywords.map((word, i) => (
+                <span
+                  key={i}
+                  className={
+                    word.includes('DEVELOPER')
+                      ? 'text-amber-400 drop-shadow-[0_0_12px_rgba(245,158,11,0.4)]'
+                      : 'text-neutral-300'
+                  }
+                >
+                  {word}
+                </span>
+              ))}
+            </div>
+          </div>
 
-          {/* Action CTAs (High Contrast Immersive UI Buttons) */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.55, delay: 0.3 }}
-            className="flex flex-wrap gap-4 sm:gap-5 items-center"
-          >
+          {/* Supporting Statement */}
+          <p className="text-base sm:text-lg text-neutral-300 font-sans leading-relaxed max-w-xl mx-auto lg:mx-0 font-light">
+            {personal.heroBio}
+          </p>
+
+          {/* Action CTAs */}
+          <div className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2">
             <a
               id="hero-primary-cta"
-              href="#projects"
-              onClick={(e) => scrollToSection(e, 'projects')}
-              className="bg-white text-black px-7 sm:px-8 py-3.5 sm:py-4 text-xs font-mono font-bold uppercase tracking-widest hover:bg-cyan-400 hover:text-black transition-all duration-200 active:scale-95 flex items-center gap-2.5 shadow-[0_0_20px_rgba(255,255,255,0.25)] hover:shadow-[0_0_25px_rgba(34,211,238,0.5)] cursor-pointer"
+              href="#journey"
+              onClick={(e) => scrollToSection(e, 'journey')}
+              className="inline-flex items-center gap-2.5 px-6 sm:px-7 py-3.5 rounded-xl bg-gradient-to-r from-amber-500 via-amber-400 to-yellow-400 text-neutral-950 font-mono text-xs sm:text-sm font-bold tracking-wider uppercase hover:shadow-[0_0_25px_rgba(245,158,11,0.45)] hover:scale-[1.02] active:scale-[0.98] transition-all"
             >
-              <span>Explore My Work</span>
-              <span>&rarr;</span>
+              <span>EXPLORE MY JOURNEY</span>
+              <ArrowRight className="w-4 h-4" />
             </a>
 
             <a
               id="hero-secondary-cta"
-              href="#journey"
-              onClick={(e) => scrollToSection(e, 'journey')}
-              className="border border-white/20 px-7 sm:px-8 py-3.5 sm:py-4 text-xs font-mono font-bold uppercase tracking-widest text-white hover:border-cyan-400/60 hover:bg-white/5 hover:text-cyan-300 transition-all duration-200 active:scale-95 cursor-pointer"
+              href="#lab"
+              onClick={(e) => scrollToSection(e, 'lab')}
+              className="inline-flex items-center gap-2.5 px-6 sm:px-7 py-3.5 rounded-xl bg-white/[0.04] hover:bg-white/[0.08] text-white border border-white/15 hover:border-cyan-400/50 font-mono text-xs sm:text-sm font-semibold tracking-wider uppercase transition-all hover:shadow-[0_0_20px_rgba(6,182,212,0.15)]"
             >
-              My Journey
+              <Terminal className="w-4 h-4 text-cyan-400" />
+              <span>MY LEARNING LAB</span>
             </a>
-          </motion.div>
+          </div>
 
-          {/* Numbered Metadata Grid */}
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.55, delay: 0.35 }}
-            className="mt-8 sm:mt-12 grid grid-cols-2 gap-6 sm:gap-8 pt-6 sm:pt-8 border-t border-white/10 max-w-md"
-          >
+          {/* Quick Metrics / Focus Badges */}
+          <div className="pt-6 border-t border-white/[0.08] grid grid-cols-3 gap-4 max-w-md mx-auto lg:mx-0 text-left font-mono">
             <div>
-              <span className="font-mono text-[10px] text-white/40 uppercase tracking-widest block mb-1.5">
-                01 / Current Focus
-              </span>
-              <span className="font-mono text-xs sm:text-sm tracking-wide text-cyan-400 font-semibold flex items-center gap-1.5">
-                <span className="w-1.5 h-1.5 rounded-full bg-cyan-400 animate-pulse" />
-                Java Development
-              </span>
+              <span className="text-[10px] text-white/40 uppercase block tracking-wider">FOCUS</span>
+              <span className="text-sm font-bold text-amber-300">{personal.currentFocus}</span>
             </div>
             <div>
-              <span className="font-mono text-[10px] text-white/40 uppercase tracking-widest block mb-1.5">
-                02 / Location
-              </span>
-              <span className="font-mono text-xs sm:text-sm tracking-wide text-neutral-200 font-medium">
-                West Bengal, India
-              </span>
+              <span className="text-[10px] text-white/40 uppercase block tracking-wider">STAGE</span>
+              <span className="text-sm font-bold text-cyan-300">FOUNDATION</span>
             </div>
-          </motion.div>
+            <div>
+              <span className="text-[10px] text-white/40 uppercase block tracking-wider">DIRECTION</span>
+              <span className="text-sm font-bold text-white/90">BUILDING</span>
+            </div>
+          </div>
+        </motion.div>
 
-        </div>
-
-        {/* Right Column: High-Tech Profile Visual Identity (5 cols on desktop) */}
-        <div className="lg:col-span-5 flex justify-center lg:justify-end z-10">
+        {/* Right Column (5 cols): Cosmic Visual & Card */}
+        <div className="lg:col-span-5 flex justify-center">
           <HeroVisual />
         </div>
-
       </div>
 
-      {/* Subtle Scroll Down Prompt at Base of Hero */}
-      <div className="pt-6 sm:pt-8 lg:pt-4 flex justify-center">
-        <a
-          id="scroll-to-about-indicator"
-          href="#about"
-          onClick={(e) => scrollToSection(e, 'about')}
-          className="flex flex-col items-center gap-2 text-[10px] font-mono text-white/40 hover:text-cyan-400 transition-colors uppercase tracking-[0.35em] group"
-        >
-          <span>SCROLL TO EXPLORE &darr;</span>
-        </a>
-      </div>
+      {/* Bottom Scroll Prompt */}
+      <a
+        id="scroll-to-about-indicator"
+        href="#about"
+        onClick={(e) => scrollToSection(e, 'about')}
+        className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-1.5 text-white/40 hover:text-amber-300 transition-colors font-mono text-[10px] tracking-widest uppercase cursor-pointer"
+      >
+        <span>SCROLL TO EXPLORE</span>
+        <ChevronDown className="w-4 h-4 animate-bounce text-amber-400" />
+      </a>
     </section>
   );
 };

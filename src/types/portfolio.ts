@@ -1,4 +1,4 @@
-export type SkillStatus = 'LEARNING' | 'PRACTICING' | 'EXPLORING';
+export type SkillStatus = 'LEARNING' | 'BUILDING FOUNDATIONS' | 'PRACTICING' | 'EXPLORING';
 
 export interface SkillItem {
   id: string;
@@ -19,36 +19,14 @@ export interface JourneyStage {
   status: 'completed' | 'current' | 'future';
 }
 
-export interface ProjectItem {
+export interface LabItem {
   id: string;
-  number: string;
+  slotNumber: string;
   title: string;
-  tagline: string;
+  statusText: string;
   description: string;
-  problem: string;
-  whatIBuilt: string;
-  technologies: string[];
-  status: 'Completed' | 'Ongoing' | 'In Planning';
-  githubUrl?: string;
-  liveDemoUrl?: string;
-  previewVariant: 'terminal' | 'logic' | 'blueprint';
-  keyHighlights: string[];
-}
-
-export interface MilestoneItem {
-  id: string;
-  number: string;
-  title: string;
-  description: string;
-  stageBadge: string;
-}
-
-export interface InterestItem {
-  id: string;
-  number: string;
-  title: string;
-  description: string;
-  iconName: string;
+  focusArea: string;
+  tags: string[];
 }
 
 export interface PortfolioData {
@@ -73,6 +51,12 @@ export interface PortfolioData {
     label: string;
     href: string;
   }[];
+  about: {
+    sectionLabel: string;
+    heading: string;
+    bio: string;
+    focusStatement: string;
+  };
   journey: {
     sectionLabel: string;
     heading: string;
@@ -84,46 +68,33 @@ export interface PortfolioData {
     description: string;
     items: SkillItem[];
   };
-  projects: {
+  learningLab: {
     sectionLabel: string;
     heading: string;
     description: string;
-    items: ProjectItem[];
+    items: LabItem[];
   };
-  milestones: {
+  githubSection: {
     sectionLabel: string;
     heading: string;
     description: string;
-    items: MilestoneItem[];
+    url: string;
+    username: string;
   };
-  identity: {
+  mindset: {
     sectionLabel: string;
-    heading: string;
-    quote: string;
-    pillars: {
-      name: string;
-      meaning: string;
-    }[];
-    reflection: string;
-  };
-  interests: {
-    sectionLabel: string;
-    heading: string;
-    items: InterestItem[];
-  };
-  northStar: {
-    sectionLabel: string;
-    heading: string;
+    statement: string;
     supportingText: string;
-    corePrinciples: string[];
   };
-  resume: {
+  roadAhead: {
     sectionLabel: string;
     heading: string;
-    description: string;
-    viewUrl: string;
-    downloadUrl: string;
-    lastUpdated: string;
+    text: string;
+    milestones: {
+      phase: string;
+      title: string;
+      description: string;
+    }[];
   };
   contact: {
     sectionLabel: string;
@@ -131,7 +102,9 @@ export interface PortfolioData {
     description: string;
     email: string;
     github: string;
+    githubHandle: string;
     linkedin: string;
+    linkedinName: string;
     location: string;
   };
   footer: {
